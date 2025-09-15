@@ -1,0 +1,356 @@
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.controls select,
+.controls input,
+.controls button {
+  padding: 0.5rem;
+  font-size: 1.25rem;
+  font-family: "Poppins";
+}
+
+.controls button {
+  background-color: #00880d;
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 1rem 2.5rem;
+}
+
+.controls button:hover {
+  background-color: #27a433;
+}
+
+@media only screen and (max-width: 60rem) {
+  .controls button {
+    padding: 0.5rem 2rem;
+  }
+}
+
+.table-container {
+  max-height: calc(100vh - 7.5rem - 10rem - 7.5rem);
+  /* subtract header + footer + spacing */
+  overflow-y: auto;
+  overflow-x: auto; /* Added to support horizontal scroll */
+  position: relative; /* Important for sticky to work */
+  border-radius: 0.75rem;
+  box-shadow: 0 0 1.2rem rgba(0, 0, 0, 0.05);
+  max-width: 100%;
+}
+
+@media only screen and (max-width: 60rem) {
+  .table-container {
+    max-height: calc(100vh - 20rem - 10rem - 10rem);
+  }
+}
+
+.table-scroll {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.sensor-container {
+  flex: 1; /* fill remaining vertical space */
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  background-color: #fcf8ef;
+  border-top: 0.2rem solid #00880d;
+  border-radius: 0.75rem;
+  box-shadow: 0 0 1.2rem rgba(0, 0, 0, 0.05);
+}
+
+/* Fancy table layout */
+.sensor-table {
+  width: max-content; /* Changed from 100% to support horizontal scroll */
+  border-spacing: 0;
+  border-collapse: separate;
+  color: #2e2e2e;
+  font-size: 0.95rem;
+  box-shadow: 0 0 1rem rgba(0, 136, 13, 0.15);
+  border-radius: 0.75rem;
+}
+
+/* Rounded top */
+.sensor-table thead tr:first-child th:first-child {
+  border-top-left-radius: 0.75rem;
+}
+.sensor-table thead tr:first-child th:last-child {
+  border-top-right-radius: 0.75rem;
+}
+
+/* Cells */
+.sensor-table th,
+.sensor-table td {
+  box-sizing: border-box;
+  width: 100%;
+  border: 0.1rem solid #d0e4cc;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  vertical-align: middle;
+  white-space: nowrap; /* Prevent wrapping in cells */
+  transition: all 0.3s ease;
+}
+
+.sensor-table th.dragging,
+.sensor-table td.dragging {
+  opacity: 0.5;
+  transform: scale(1.05);
+  z-index: 1000;
+}
+
+.sensor-table th.drag-over,
+.sensor-table td.drag-over {
+  outline: 0.2rem dashed #444;
+}
+
+/* Sticky header */
+.sensor-table thead th {
+  position: sticky;
+  top: 0;
+  background-color: rgba(0, 136, 13, 0.9);
+  color: white;
+  font-weight: 600;
+  font-size: 1.05rem;
+  z-index: 2;
+}
+
+.sensor-table-sticky thead th {
+  position: sticky;
+}
+
+/* Row colors */
+.sensor-table tr {
+  background-color: #fff;
+}
+
+.sensor-table tr:nth-child(even) {
+  background-color: #f8fbe5;
+}
+
+/* Hover & selected rows */
+.sensor-table tbody tr:hover {
+  background-color: #d6f4db;
+  cursor: pointer;
+}
+
+/* Selected row general style */
+.sensor-table .row-selected {
+  background-color: #c6ecd6 !important; /* Your highlight color */
+}
+
+/* Ensure sticky columns in the selected row also get same background */
+.sensor-table .row-selected .sticky-col {
+  background-color: #c6ecd6 !important;
+}
+
+/* General row hover */
+.sensor-table tbody tr:hover {
+  background-color: #d6f4db; /* Light green or your preferred hover color */
+  cursor: pointer;
+}
+
+/* Ensure sticky columns in hovered row are included */
+.sensor-table tbody tr:hover .sticky-col {
+  background-color: #d6f4db !important;
+}
+
+/* Footer layout */
+.table-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 0.2rem solid #cdeacc;
+  font-size: 1rem;
+  color: #444;
+}
+
+/* Pagination buttons */
+.pagination button {
+  margin: 0 0.5rem;
+  padding: 0.45rem 1rem;
+  border-radius: 0.6rem;
+  border: none;
+  background-color: #00880d;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #006e0b;
+}
+
+.pagination button:disabled {
+  background-color: #c2e0c4;
+  color: #eee;
+  cursor: not-allowed;
+}
+
+/* Improvements to implement:
+1. Keep both group headers and child headers sticky together while scrolling vertically.
+2. Ensure ungrouped headers are visually aligned with grouped ones. */
+
+/* ✅ Fix #1: Update .group-header top layering */
+/* ========== Group Header Style ========== */
+.group-header {
+  position: sticky;
+  top: 0;
+  background-color: #005f0a;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  z-index: 50 !important;
+  height: 1.65rem;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.group-header-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 11 !important; /* Raise above subheaders */
+  background-color: rgba(0, 136, 13, 0.95);
+  white-space: nowrap;
+  cursor: pointer;
+  padding: 0.75rem 1rem;
+  box-sizing: border-box;
+}
+
+.group-header-left {
+  left: 0rem !important;
+}
+
+/* Fix overlapping when NOT sticky left/right */
+.group-header:not(.sticky-col) {
+  left: unset !important;
+  right: unset !important;
+}
+.sensor-table thead tr:nth-child(2) th:not([rowspan]) {
+  position: sticky;
+  top: 3.35rem; /* Push down below group header */
+  z-index: 5;
+  background-color: rgba(0, 136, 13, 0.95);
+}
+
+/* ========== Subheaders under Group Header ========== */
+
+.sensor-table thead tr:nth-child(2) th:not([rowspan]) {
+  position: sticky;
+  top: 3.35rem;
+  z-index: 5;
+  background-color: rgba(0, 136, 13, 0.95);
+}
+
+/* ========== Sticky Columns ========== */
+.sticky-col {
+  position: sticky;
+  background-color: white;
+  z-index: 11 !important;
+  box-sizing: border-box;
+  overflow: hidden;
+  white-space: nowrap;
+
+  /* ✅ Remove this from .sticky-col globally */
+  /* top: 0; */
+}
+
+.sensor-table thead .sticky-col {
+  top: 0;
+  z-index: 8 !important;
+  position: sticky; /* important to re-declare here */
+}
+
+.sensor-table thead tr:nth-child(2) th.sticky-col {
+  top: 3.35rem;
+}
+
+.sticky-left {
+  box-shadow: 0.2rem 0 0.5rem rgba(0, 0, 0, 0.05);
+  z-index: 7 !important; /* Ensure sticky headers stay above scrollable body */
+  left: 0;
+}
+
+/* ========== Resizable Columns ========== */
+.resize-handle {
+  width: 0.8rem;
+  cursor: col-resize;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: -1rem;
+  z-index: 6;
+  background-color: transparent;
+}
+.resize-handle:hover {
+  background-color: rgba(159, 197, 163, 0.05);
+}
+.resize-handle:hover::after {
+  background-color: #00880d;
+}
+
+/* ========== Row Colors and Hover ========== */
+.sensor-table tr:nth-child(even) {
+  background-color: #f8fbe5;
+}
+.sensor-table tbody tr:hover {
+  background-color: #d6f4db;
+  cursor: pointer;
+}
+
+.grouped-sticky-col {
+  z-index: 11 !important;
+  left: 0;
+}
+
+.sticky-col .sticky-left {
+  top: 4rem;
+}
+
+/* ================= Cell Style for Wrapping ================== */
+.cell-wrap {
+  white-space: normal !important; /* Allow wrapping */
+  word-break: break-word; /* Break long words */
+  overflow-wrap: break-word;
+  line-height: 1.2rem;
+  vertical-align: top;
+}
+
+/* ================= Cell Style for Ellipsis ================== */
+.cell-ellipsis {
+  white-space: nowrap; /* Prevent wrapping */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Optional: Add consistent height to wrapped rows for alignment */
+.sensor-table td {
+  vertical-align: top; /* Helps with wrapping layout */
+  padding: 1rem;
+}
+
+.dragging {
+  opacity: 0.5;
+  background: #fffae6;
+}
+
+.column-header .pin-icon {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  display: inline;
+}
+
+th:hover .pin-icon {
+  opacity: 1;
+}
+
+.column-header .show {
+  opacity: 1;
+}

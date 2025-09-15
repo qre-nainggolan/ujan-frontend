@@ -1,0 +1,132 @@
+.calendar-wrapper {
+  position: relative;
+  width: max-content;
+  font-family: sans-serif;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.calendar-input {
+  padding: 0.5rem;
+  width: 13rem;
+  font-size: 1rem;
+  border: 0.1rem solid #ccc;
+  border-radius: 0.4rem;
+}
+
+.calendar-btn {
+  background: #f0f0f0;
+  border: 0.1rem solid #ccc;
+  border-radius: 0.4rem;
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+}
+
+.calendar-container {
+  position: absolute;
+  top: 2.8rem;
+  left: 0;
+  z-index: 10;
+  max-width: 30rem;
+  border: 0.1rem solid #ccc;
+  background: white;
+  border-radius: 0.6rem;
+  box-shadow: 0 0.4rem 1.6rem rgba(0, 0, 0, 0.1);
+  padding: 0.75rem;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.calendar-header button {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.2rem 0.5rem;
+}
+
+.calendar-title {
+  display: flex;
+  gap: 0.4rem;
+  font-weight: 600;
+  font-size: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.clickable {
+  cursor: pointer;
+  padding: 0.1rem 0.3rem;
+  border-radius: 0.3rem;
+  transition: background-color 0.2s ease;
+}
+.clickable:hover {
+  background-color: #f0f0f0;
+}
+
+.weekdays,
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+.weekday {
+  font-weight: bold;
+  text-align: center;
+  color: #555;
+}
+
+.day {
+  text-align: center;
+  padding: 0.6rem 0;
+  border-radius: 0.4rem;
+  cursor: pointer;
+}
+
+.day:hover {
+  background-color: #f0f0f0;
+}
+
+.outside {
+  color: #aaa;
+}
+
+.today {
+  border: 0.1rem solid #007bff;
+  color: #007bff;
+}
+
+.selected {
+  background-color: #007bff;
+  color: white;
+}
+
+.picker-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+.picker-item {
+  text-align: center;
+  padding: 0.4rem;
+  border-radius: 0.3rem;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.picker-item:hover {
+  background-color: #e0e0e0;
+}

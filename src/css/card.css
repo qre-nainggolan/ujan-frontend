@@ -1,0 +1,242 @@
+.row2 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.85rem;
+  max-width: 114rem;
+  margin: 0 auto;
+  padding: 1rem 1rem;
+}
+
+.card-wrapper {
+  flex: 1 1 calc(25% - 2rem); /* Four per row with gap */
+  box-sizing: border-box;
+  min-width: 26.75rem;
+  max-width: 205rem;
+}
+
+@media screen and (max-width: 82.5rem) {
+  .card-wrapper {
+    flex: 1 1 calc(50% - 2rem); /* Two per row */
+  }
+}
+
+@media screen and (max-width: 50rem) {
+  .card-wrapper {
+    flex: 1 1 100%; /* One per row */
+  }
+}
+
+.package-card {
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.package-card:hover {
+  transform: translateY(-5px);
+}
+
+.card-img {
+  height: 160px;
+  background-size: cover;
+  background-position: center;
+}
+
+.card-body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #1e88e5;
+  margin-bottom: 0.5rem;
+}
+
+.card-desc {
+  color: #444;
+  font-size: 0.95rem;
+  flex-grow: 1;
+}
+
+.card-tags {
+  margin-top: 0.5rem;
+}
+
+.purchase-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+  font-family: "Poppins";
+  font-size: 1.5rem;
+}
+
+.purchase-card {
+  background: #ffff;
+  border-radius: 16px;
+  padding: 2rem 2.5rem;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.purchase-title {
+  font-size: 2.5rem;
+  color: #00880d;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.purchase-subtitle {
+  text-align: center;
+  margin-bottom: 1.75rem;
+  font-weight: 500;
+  color: #444;
+}
+
+.purchase-detail-box {
+  background: #f1f8ff;
+  padding: 1rem;
+  border-radius: 10px;
+  border-left: 4px solid #00880d;
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.price {
+  color: #2e7d32;
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  font-size: 2.5rem;
+}
+
+.purchase-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.purchase-input {
+  color: #999;
+  font-size: 2rem;
+  width: 100%;
+  color: inherit;
+  font-family: inherit;
+  padding: 1rem 0.5rem;
+  border-radius: 0.2rem;
+  background-color: rgba(255, 255, 255, 0.5);
+  border: solid 0.1rem #ccc;
+  display: inline-block;
+  transition: all 0.3s;
+}
+
+.purchase-input::-webkit-input-placeholder {
+  color: #999;
+  font-size: 1.25rem;
+  width: 98%;
+}
+
+.purchase-input:focus {
+  outline: none;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1);
+  border-bottom: 3px solid #55c57a;
+}
+
+.purchase-input:focus:invalid {
+  border-bottom: 0.3rem solid #ff7730;
+}
+
+.purchase-button {
+  width: 100%;
+  background: #00880d;
+  color: #fff;
+  font-weight: bold;
+  padding: 0.9rem;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 1.75rem 0rem;
+  margin: 2.5rem 0rem;
+}
+
+.purchase-button:hover {
+  background: #056b0f;
+}
+
+.purchase-button.confirmed {
+  background-color: #43a047;
+  cursor: default;
+}
+
+.purchase-success {
+  text-align: center;
+  margin-top: 1.2rem;
+  font-weight: bold;
+  color: #2e7d32;
+}
+
+.tag {
+  display: inline-block;
+  background: #e3f2fd;
+  color: #1565c0;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  margin-right: 0.4rem;
+  margin-bottom: 0.4rem;
+}
+
+.card-footer {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.original {
+  text-decoration: line-through;
+  color: #aaa;
+}
+
+.final {
+  color: #2e7d32;
+  font-weight: bold;
+}
+
+.badge-discount {
+  background-color: #ef5350;
+  color: white;
+  border-radius: 0.5rem;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.75rem;
+  margin-top: 0.2rem;
+}
+
+.buy-btn {
+  background: #1e88e5;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.buy-btn:hover {
+  background: #1565c0;
+  background-color: #1e88e5;
+}

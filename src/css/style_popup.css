@@ -1,0 +1,246 @@
+.popup__overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center; /* center horizontally */
+  align-items: flex-start; /* move to top */
+  padding-top: 0rem; /* space from very top */
+  z-index: 9999;
+}
+
+
+.popup__content {
+  background: #efe7e7;
+  padding: 1.25rem;
+  border-radius: 1.2rem;
+  max-width: 95vw;
+  width: 95vw;
+  max-height: 90vh;
+  box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, 0.2);
+  border-top: .8rem solid #00880d; /* subtle green accent */
+  max-height: calc(100vh - 4rem);
+  overflow-y: auto;
+
+}
+
+.popup__content::-webkit-scrollbar {
+  width: .8rem;
+}
+.popup__content::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: .4rem;
+}
+
+.popup__confirmation {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 0;
+  transition: all 0.5s;
+  animation: scaleOut 0.2s ease-in forwards;
+}
+
+.popup__confirmation-show {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  
+  justify-content: center;
+  align-items: center;
+  z-index: 50000;
+  transition: all 0.5s;
+  animation: scaleIn 0.5s ease-out;
+}
+
+.popup__confirmation__overlay {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.popup__confirmation__content {
+  position: absolute;
+  transform: scale(0.90);
+  cursor: move;
+}
+
+.popup__confirmation__content.fancy {
+  position: relative;
+  z-index: 100;
+  background: white;
+  padding: 2rem;
+  border-radius: 1.2rem;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 90%;
+  text-align: center;
+  
+}
+
+
+.popup__confirmation__title {
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.popup__confirmation__text {
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 1.5rem;
+}
+
+.popup__confirmation__buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.popup__confirmation__button {
+  flex: 1;
+  padding: 0.6rem 0.8rem;
+  border: none;
+  border-radius: .6rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.popup__confirmation__button--yes {
+  background-color: #28a745;
+  color: white;
+}
+
+.popup__confirmation__button--yes:hover {
+  background-color: #218838;
+}
+
+.popup__confirmation__button--cancel {
+  background-color: #6c757d;
+  color: white;
+}
+
+.popup__confirmation__button--cancel:hover {
+  background-color: #5a6268;
+}
+
+.popup__close {
+  top: .25rem;
+  right: 1rem;
+  background-color: transparent;  
+  border: none;
+  font-size: 3rem;
+  color: #c00a0a;
+  cursor: pointer;
+  z-index: 10001;
+  transition: color 0.2s ease;
+}
+
+.popup__close:hover {
+  color: #96053f; /* Optional: match your accent color */
+}
+
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacit
+  }
+}
+
+@keyframes scaleOut {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+}
+
+
+/* Popup container */
+.react-datepicker {
+  width: auto;
+  padding: 1rem;
+  font-size: 1.05rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Month header */
+.react-datepicker__header {
+  background-color: #007a33;
+  color: white;
+  padding: 1rem;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  font-weight: bold;
+  font-size: 1.15rem;
+}
+
+/* Calendar layout - DON'T use display: grid here */
+.react-datepicker__month {
+  margin: 0.5rem;
+}
+
+/* Weekday headers */
+.react-datepicker__day-name {
+  width: 2.5rem;
+  line-height: 2.5rem;
+  margin: 0.15rem;
+  font-weight: 600;
+}
+
+/* Day cells */
+.react-datepicker__day {
+  width: 2.5rem;
+  height: 2.5rem;
+  line-height: 2.5rem;
+  margin: 0.15rem;
+  font-size: 1.05rem;
+  border-radius: 0.5rem;
+  display: inline-block;
+  text-align: center;
+}
+
+/* Selected day */
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+  background-color: #28a745;
+  color: white;
+  border-radius: 50%;
+}
+
+/* Navigation buttons */
+.react-datepicker__navigation {
+  top: 1.2rem;
+}
+
+.react-datepicker__input-container {
+  width: 100%;
+}
+.react-datepicker__input-container input {
+  width: 100%;
+  box-sizing: border-box;
+}

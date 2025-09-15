@@ -1,0 +1,432 @@
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
+
+.TableRowHeader {
+  margin-left: 2rem;
+  margin-right: 2rem;
+  display: flex;
+  flex-direction: row;
+  line-height: 0.5rem;
+  font-size: 1rem;
+
+  &__Cell {
+    vertical-align: bottom;
+    text-align: center;
+    background-color: #37b24d;
+    box-sizing: border-box;
+    color: #ebfbee;
+    font-size: small;
+    letter-spacing: -0.025rem;
+    font-family: inherit;
+    text-indent: 2px;
+
+    &:not(:last-child) {
+      flex: 1;
+    }
+
+    &:nth-child(5) {
+      border-right: 1px solid #37b24d;
+    }
+
+    &-number {
+      text-align: right;
+    }
+
+    & button {
+      color: $color-primary;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      background-image: $gradient;
+      padding: 0.35rem 0.35rem;
+      margin: 0.15rem auto;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-indent: 0.15rem;
+
+      svg {
+        height: 2.5rem;
+        width: 2.5rem;
+        fill: #fff;
+      }
+
+      span {
+        margin: 0 0.4rem;
+        color: #fff;
+        font-weight: bolder;
+        letter-spacing: 0.2rem;
+      }
+
+      &:hover {
+        transform: scale(1.07);
+      }
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+}
+
+.TableRowField {
+  font-family: inherit;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #ccc;
+
+  &:nth-child(2n + 3) {
+    background-color: #f8f9fa;
+  }
+
+  &__Cell {
+    vertical-align: bottom;
+    text-align: center;
+    font-family: inherit;
+    font-size: 1.45rem;
+    transition: all 1;
+    border-top: 1px solid #37b24d;
+    align-content: stretch;
+    align-items: center;
+
+    &:not(:first-child) {
+      flex: 1;
+      border-right: 1px solid #37b24d;
+    }
+
+    &:first-child {
+      border-right: 1px solid #37b24d;
+    }
+
+    &:nth-child(2) {
+      font-weight: bold;
+    }
+
+    &-number {
+      text-align: right;
+    }
+
+    & input,
+    & select {
+      font-size: 1.35rem;
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-bottom: solid;
+      border-radius: 0.1rem;
+      border-width: 0.1rem;
+      border-color: #ffc078;
+      transition: all 0.2s;
+      height: 100%;
+      font-family: inherit;
+
+      &::placeholder {
+        color: $color-grey-light-3;
+      }
+
+      &:focus {
+        outline: none;
+        border: none;
+        border-bottom: solid;
+        border-radius: 0.1rem;
+        border-width: 0.1rem;
+        border-color: #37b24d;
+        background-color: $color-grey-light-1;
+      }
+    }
+
+    & input {
+      text-align: right;
+    }
+
+    & button {
+      color: $color-primary;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      background-image: $gradient;
+      padding: 0.35rem 0.35rem;
+      margin: 0.15rem auto;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-indent: 0.15rem;
+
+      svg {
+        height: 2.5rem;
+        width: 2.5rem;
+        fill: #fff;
+      }
+
+      span {
+        margin: 0 0.4rem;
+        color: #fff;
+        font-weight: bolder;
+        letter-spacing: 0.2rem;
+      }
+
+      &:hover {
+        transform: scale(1.07);
+      }
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
+  &__Link {
+    text-decoration: underline;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &:hover {
+    background-color: $color-primary-light-2;
+    transform: scale(1.01);
+  }
+}
+
+.TableTopBar {
+  padding-top: 1rem;
+  margin-bottom: 1rem;
+  margin-left: 20px;
+  display: flex;
+  justify-content: space-between;
+  margin-right: 2rem;
+  min-height: 2rem;
+}
+
+// SEARCH
+.TableSearch {
+  flex: 0 0 45%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &__input {
+    font-family: inherit;
+    font-size: 1.5rem;
+    color: inherit;
+    background-color: var(--color-grey-light-2);
+    border: none;
+    padding: 2.5rem 2rem;
+    border-radius: 100px;
+    width: 90%;
+    transition: all 0.2s;
+    margin-right: -3.25rem;
+
+    &:focus {
+      outline: none;
+      width: 100%;
+      background-color: var(--color-grey-light-3);
+    }
+
+    &::-webkit-input-placeholder {
+      font-weight: 100;
+      color: var(--color-grey-light-4);
+    }
+  }
+
+  &__input:focus + &__button {
+    background-color: var(--color-grey-light-3);
+  }
+
+  &__button {
+    border: none;
+    background-color: var(--color-grey-light-2);
+
+    &:focus {
+      outline: none;
+    }
+
+    &:active {
+      transform: translateY(2px);
+    }
+  }
+
+  &__icon {
+    height: 2rem;
+    width: 2rem;
+    fill: var(--color-grey-dark-3);
+  }
+}
+
+// Table Form
+.TableForm {
+  &__group:not(:last-child) {
+    margin-bottom: 0.4rem;
+  }
+
+  &__input {
+    font-size: 1.5rem;
+    color: inherit;
+    font-family: inherit;
+    padding: 1.5rem 2rem;
+    border-radius: 2px;
+    background-color: rgba($color-light-grey-3, 1);
+    border: none;
+    border-bottom: 3px solid transparent;
+    width: 100%;
+    display: block;
+    transition: all 0.3s;
+
+    /**
+            @include respond(tab-port){
+                width:100%;
+            } 
+        */
+
+    &::-webkit-input-placeholder {
+      color: $color-grey-dark-2;
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 1rem 2rem rgba($color-black, 0.1);
+      border-bottom: 3px solid $color-primary;
+    }
+
+    &:focus:invalid {
+      border-bottom: 3px solid $color-secondary-dark;
+    }
+  }
+
+  &__label {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-left: 2rem;
+    margin-top: 0.7rem;
+    top: -5rem;
+    display: block;
+    transition: all 0.3s;
+  }
+
+  &__input:placeholder-shown + &__label {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10rem);
+  }
+
+  select:required:invalid + &__label {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4rem);
+  }
+
+  &__radio-group {
+    width: 25%;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+    /**
+        @include respond(tab-port){
+            width:100%;
+            margin-bottom: 2rem;
+        }
+        */
+  }
+
+  &__radio-input {
+    display: none;
+  }
+
+  &__radio-label {
+    font-size: $default-font-size;
+    cursor: pointer;
+    position: relative;
+    padding-left: 4.5rem;
+  }
+
+  &__radio-button {
+    height: 3rem;
+    width: 3rem;
+    border: 5px solid $color-primary;
+    border-radius: 50%;
+    display: inline-block;
+    position: absolute;
+    left: 0;
+    top: -0.4rem;
+
+    &::after {
+      content: "";
+      display: block;
+      height: 1.3rem;
+      width: 1.3rem;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: $color-primary;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+  }
+
+  &__radio-input:checked ~ &__radio-label &__radio-button::after {
+    opacity: 1;
+  }
+}
+
+// USER NAVIGATION
+.TableUser-nav {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+
+  & > * {
+    padding: 0 2rem;
+    cursor: pointer;
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  &__icon-box {
+    position: relative;
+  }
+
+  &__icon {
+    height: 2.5rem;
+    width: 2.5rem;
+    fill: $asian-agri-green;
+
+    &:hover {
+      fill: var(--color-primary);
+    }
+  }
+
+  &__notification {
+    font-size: 0.9rem;
+    height: 1.75rem;
+    width: 10rem;
+    background-color: $asian-agri-green;
+    color: #fff;
+    position: absolute;
+    margin-top: 4.5rem;
+    right: 4.1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+      background-color: var(--color-primary);
+    }
+  }
+
+  &__user-photo {
+    height: 3.75rem;
+    border-radius: 50%;
+    margin-right: 1rem;
+  }
+
+  &__user-name {
+    color: #fff;
+    font-size: 1.75rem;
+  }
+}

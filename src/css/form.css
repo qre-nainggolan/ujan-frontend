@@ -1,0 +1,260 @@
+.question-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  width: 100%;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 1.25rem;
+}
+
+.question-form h1 {
+  text-align: center;
+  color: #00880d;
+  font-size: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.question-form label {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #00880d;
+}
+
+.question-form input,
+.question-form select,
+.question-form textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 0.6rem;
+  border: 0.1rem solid #86ca8d;
+  font-size: 1.25rem;
+  background: #fefefe;
+  color: #222;
+}
+
+.question-form textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.radio-group {
+  display: flex;
+  gap: 2rem;
+  margin: 0.8rem 0 1.6rem;
+  flex-wrap: wrap;
+}
+
+.radio-option {
+  position: relative;
+  padding-left: 3rem;
+  cursor: pointer;
+  font-weight: 500;
+  color: #1c3b58;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+}
+
+.radio-option input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.radio-option .custom-radio {
+  position: absolute;
+  left: 0;
+  top: 2px;
+  height: 1.8rem;
+  width: 1.8rem;
+  background-color: #fff;
+  border: 2px solid #6ba4d9;
+  border-radius: 50%;
+  transition: all 0.2s ease-in-out;
+}
+
+.radio-option input:checked ~ .custom-radio {
+  border-color: #2176ae;
+  background-color: #2176ae;
+}
+
+.radio-option .custom-radio::after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.radio-option input:checked ~ .custom-radio::after {
+  display: block;
+}
+
+.radio-option .custom-radio::after {
+  top: 4px;
+  left: 4px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: white;
+}
+
+.selection__input {
+  color: #999;
+  font-size: 1.15rem;
+  color: inherit;
+  font-family: inherit;
+  padding: 1rem 0.5rem;
+  border-radius: 0.2rem;
+  background-color: rgba(255, 255, 255, 0.5);
+  border: solid 0.1rem #ccc;
+  display: inline-block;
+  transition: all 0.3s;
+}
+
+@media only screen and (max-width: 60.25em) {
+  .selection__input {
+    width: 100%;
+  }
+
+  .question-form input,
+  .question-form select,
+  .question-form textarea {
+    width: 100%;
+  }
+}
+
+.selection__input::-webkit-input-placeholder {
+  color: #999;
+  font-size: 1.25rem;
+  width: 98%;
+}
+
+.selection__input:focus {
+  outline: none;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1);
+  border-bottom: 3px solid #55c57a;
+}
+
+.selection__input:focus:invalid {
+  border-bottom: 0.3rem solid #ff7730;
+}
+
+.selection__label {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-left: 2rem;
+  margin-top: 0.7rem;
+  display: block;
+  transition: all 0.3s;
+}
+.selection__input:placeholder-shown + .selection__label {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4rem);
+}
+
+.btn,
+.btn:link,
+.btn:visited {
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 1.5rem 4rem;
+  display: inline-block;
+  border-radius: 10rem;
+  transition: all 0.2s;
+  position: relative;
+  font-size: 1.6rem;
+  border: none;
+  cursor: pointer;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
+}
+
+.btn:hover::after {
+  transform: scaleX(1.4) scaleY(1.6);
+  opacity: 0;
+}
+
+.btn:active,
+.btn:focus {
+  outline: none;
+  transform: translateY(-1px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+}
+.btn--white {
+  background-color: #fff;
+  color: #777;
+  margin-top: 1rem;
+}
+
+.btn--white::after {
+  background-color: #efe8e8;
+}
+
+.btn--green {
+  background-color: #218743;
+  color: #fff;
+  margin: 0 4rem;
+}
+
+.btn--green::after {
+  background-color: #55c57a;
+}
+
+.btn::after {
+  content: "";
+  display: inline-block;
+  height: 100%;
+  width: 100%;
+  border-radius: 10rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  transition: all 0.4s;
+}
+
+.btn--animated {
+  animation: moveInBottom 0.5s ease-out 0.75s;
+  animation-fill-mode: backwards;
+}
+
+.btn-text:link,
+.btn-text:visited {
+  font-size: 1.6rem;
+  color: #55c57a;
+  display: inline-block;
+  text-decoration: none;
+  border-bottom: 1px solid #55c57a;
+  padding: 3px;
+  transition: all 0.2s;
+}
+.btn-text:hover {
+  background-color: #55c57a;
+  color: #fff;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+.btn-text:active {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.form-row > div {
+  flex: 1;
+  min-width: 44rem;
+}
+
+.form-row > button {
+  flex: 1;
+  min-width: 31rem;
+}

@@ -1,0 +1,2019 @@
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
+
+.formAdd-recipe-window {
+  position: absolute;
+  top: 0.75%;
+  left: 0.75%;
+  right: 0.75%;
+
+  background-color: white;
+  border-radius: 9px;
+
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 4rem 6rem rgba(0, 0, 0, 0.25);
+  z-index: 1000;
+  transition: all 0.5s;
+
+  .formBtn--close-modal {
+    font-family: inherit;
+    color: inherit;
+    position: absolute;
+    top: 0.5rem;
+    right: 1.6rem;
+    font-size: 3rem;
+    cursor: pointer;
+    border: none;
+    background: none;
+  }
+}
+
+.formOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  transition: all 0.5s;
+}
+
+.formHidden {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.formUpload {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem 5rem;
+  align-items: baseline;
+
+  &__column {
+    display: grid;
+    grid-template-columns: 1fr 2.8fr;
+    align-items: center;
+    gap: 0.5rem;
+
+    & label {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: inherit;
+    }
+
+    & input,
+    & select,
+    & textarea {
+      font-size: 1.5rem;
+      padding: 0.8rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+
+      &::placeholder {
+        color: $color-grey-light-3;
+      }
+
+      &:focus {
+        outline: none;
+        border: 1px solid $color-primary;
+        background-color: $color-grey-light-1;
+      }
+    }
+
+    & button {
+      grid-column: 1 / span 2;
+      justify-self: center;
+      margin-top: 1rem;
+      letter-spacing: 0.25rem;
+    }
+  }
+
+  &__column--3 {
+    display: grid;
+    grid-template-columns: 0.85fr 2.8fr;
+    align-items: center;
+    gap: 0.525rem;
+
+    & label {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: inherit;
+    }
+
+    & input,
+    & select,
+    & datalist {
+      font-size: 1.5rem;
+      padding: 0.8rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+
+      &::placeholder {
+        color: $color-grey-light-3;
+      }
+
+      &:focus {
+        outline: none;
+        border: 1px solid $color-primary;
+        background-color: $color-grey-light-1;
+      }
+    }
+
+    & button {
+      grid-column: 1 / span 2;
+      justify-self: center;
+      margin-top: 1rem;
+    }
+  }
+
+  &__heading {
+    font-size: 2rem;
+    text-transform: uppercase;
+    grid-column: 1/-1;
+  }
+
+  &__btn {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+
+  &__btnSub {
+    justify-self: center;
+    grid-column: 2 / 3;
+  }
+
+  &__radio-group {
+    width: 25%;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+    /**
+        @include respond(tab-port){
+            width:100%;
+            margin-bottom: 2rem;
+        }
+        */
+  }
+
+  &__radio-input {
+    display: none;
+  }
+
+  &__radio-label {
+    font-size: $default-font-size;
+    cursor: pointer;
+    position: relative;
+    padding-left: 4.5rem;
+  }
+
+  &__radio-button {
+    height: 3rem;
+    width: 3rem;
+    border: 5px solid $color-primary;
+    border-radius: 50%;
+    display: inline-block;
+    position: absolute;
+    left: 0;
+    top: -0.4rem;
+
+    &::after {
+      content: "";
+      display: block;
+      height: 1.3rem;
+      width: 1.3rem;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: $color-primary;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+  }
+
+  &__radio-input:checked ~ &__radio-label &__radio-button::after {
+    opacity: 1;
+  }
+}
+
+.formUploadFooter {
+  display: grid;
+  grid-template-columns: 2.85fr 0.75fr 0.65fr 1fr;
+  gap: 0.5rem 0.5rem;
+  margin-top: 0.45rem;
+}
+
+.formUploadFooterBongkar {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem 5rem;
+  margin-top: 1rem;
+
+  &__firstLarger {
+    gap: 3rem 1rem;
+    grid-template-columns: 1.25fr 1fr;
+  }
+}
+
+.formUploadFooterBongkarThreeCluster {
+  display: grid;
+  grid-template-columns: 0.85fr 0.35fr 0.8fr;
+  gap: 2rem 1rem;
+  margin-top: 1rem;
+}
+
+////// Start subForm
+.subFormAdd-recipe-window {
+  position: absolute;
+  top: 1%;
+  left: 1%;
+  right: 1%;
+  max-height: 95%;
+  overflow-y: auto;
+
+  background-color: #fffdfd;
+  color: #0b0a0a;
+  border-radius: 9px;
+
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 4rem 6rem rgba(0, 0, 0, 0.25);
+  z-index: 1010;
+  transition: all 0.5s;
+
+  .subFormBtn--close-modal {
+    font-family: inherit;
+    color: inherit;
+    position: absolute;
+    top: 0.5rem;
+    right: 1.6rem;
+    font-size: 3.5rem;
+    cursor: pointer;
+    border: none;
+    background: none;
+  }
+}
+
+.subFormOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 1005;
+  transition: all 0.5s;
+}
+
+.subFormHidden {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.subFormUpload {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem 6rem;
+
+  &__column {
+    display: grid;
+    grid-template-columns: 1fr 2.8fr;
+    align-items: center;
+    gap: 1.5rem;
+
+    & label {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: inherit;
+    }
+
+    & input {
+      font-size: 1.5rem;
+      padding: 0.8rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+
+      &::placeholder {
+        color: $color-grey-light-3;
+      }
+
+      &:focus {
+        outline: none;
+        border: 1px solid $color-primary;
+        background-color: $color-grey-light-1;
+      }
+    }
+
+    & button {
+      grid-column: 1 / span 2;
+      justify-self: center;
+      margin-top: 1rem;
+    }
+  }
+
+  &__heading {
+    font-size: 2.25rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    grid-column: 1/-1;
+  }
+
+  &__btn {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+}
+
+.subForm2Add-recipe-window {
+  position: absolute;
+  top: 1%;
+  left: 1%;
+  right: 1%;
+  max-height: 95%;
+  overflow-y: auto;
+
+  background-color: white;
+  border-radius: 9px;
+
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 4rem 6rem rgba(0, 0, 0, 0.25);
+  z-index: 1010;
+  transition: all 0.5s;
+
+  .subForm2Btn--close-modal {
+    font-family: inherit;
+    color: inherit;
+    position: absolute;
+    top: 0.5rem;
+    right: 1.6rem;
+    font-size: 3.5rem;
+    cursor: pointer;
+    border: none;
+    background: none;
+  }
+}
+
+.subForm2Overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 1005;
+  transition: all 0.5s;
+}
+
+.subForm2Hidden {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.subForm2Upload {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem 6rem;
+
+  &__column {
+    display: grid;
+    grid-template-columns: 1fr 2.8fr;
+    align-items: center;
+    gap: 1.5rem;
+
+    & label {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: inherit;
+    }
+
+    & input {
+      font-size: 1.5rem;
+      padding: 0.8rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+
+      &::placeholder {
+        color: $color-grey-light-3;
+      }
+
+      &:focus {
+        outline: none;
+        border: 1px solid $color-primary;
+        background-color: $color-grey-light-1;
+      }
+    }
+
+    & button {
+      grid-column: 1 / span 2;
+      justify-self: center;
+      margin-top: 1rem;
+    }
+  }
+
+  &__heading {
+    font-size: 2.25rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    grid-column: 1/-1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 5rem;
+  }
+
+  &__btn {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+}
+
+.subForm3Add-recipe-window {
+  position: absolute;
+  top: 1%;
+  left: 1%;
+  right: 1%;
+  max-height: 95%;
+  overflow-y: auto;
+
+  background-color: white;
+  border-radius: 9px;
+
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 4rem 6rem rgba(0, 0, 0, 0.25);
+  z-index: 1010;
+  transition: all 0.5s;
+
+  .subForm3Btn--close-modal {
+    font-family: inherit;
+    color: inherit;
+    position: absolute;
+    top: 0.5rem;
+    right: 1.6rem;
+    font-size: 3.5rem;
+    cursor: pointer;
+    border: none;
+    background: none;
+  }
+}
+
+.subForm3Overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 1005;
+  transition: all 0.5s;
+}
+
+.subForm3Hidden {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.subForm3Upload {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem 6rem;
+
+  &__column {
+    display: grid;
+    grid-template-columns: 1fr 2.8fr;
+    align-items: center;
+    gap: 1.5rem;
+
+    & label {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: inherit;
+    }
+
+    & input {
+      font-size: 1.5rem;
+      padding: 0.8rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+
+      &::placeholder {
+        color: $color-grey-light-3;
+      }
+
+      &:focus {
+        outline: none;
+        border: 1px solid $color-primary;
+        background-color: $color-grey-light-1;
+      }
+    }
+
+    & button {
+      grid-column: 1 / span 2;
+      justify-self: center;
+      margin-top: 1rem;
+    }
+  }
+
+  &__heading {
+    font-size: 2.25rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    grid-column: 1/-1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 5rem;
+  }
+
+  &__btn {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+}
+
+.subForm4Add-recipe-window {
+  position: absolute;
+  top: 1%;
+  left: 1%;
+  right: 1%;
+  max-height: 95%;
+  overflow-y: auto;
+
+  background-color: white;
+  border-radius: 9px;
+
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 4rem 6rem rgba(0, 0, 0, 0.25);
+  z-index: 1010;
+  transition: all 0.5s;
+
+  .subForm4Btn--close-modal {
+    font-family: inherit;
+    color: inherit;
+    position: absolute;
+    top: 0.5rem;
+    right: 1.6rem;
+    font-size: 3.5rem;
+    cursor: pointer;
+    border: none;
+    background: none;
+  }
+}
+
+.subForm4Overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 1005;
+  transition: all 0.5s;
+}
+
+.subForm4Hidden {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.subForm4Upload {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem 6rem;
+
+  &__column {
+    display: grid;
+    grid-template-columns: 1fr 2.8fr;
+    align-items: center;
+    gap: 1.5rem;
+
+    & label {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: inherit;
+    }
+
+    & input {
+      font-size: 1.5rem;
+      padding: 0.8rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+
+      &::placeholder {
+        color: $color-grey-light-3;
+      }
+
+      &:focus {
+        outline: none;
+        border: 1px solid $color-primary;
+        background-color: $color-grey-light-1;
+      }
+    }
+
+    & button {
+      grid-column: 1 / span 2;
+      justify-self: center;
+      margin-top: 1rem;
+    }
+  }
+
+  &__heading {
+    font-size: 2.25rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    grid-column: 1/-1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 5rem;
+  }
+
+  &__btn {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+}
+
+.subForm5Add-recipe-window {
+  position: absolute;
+  top: 1%;
+  left: 1%;
+  right: 1%;
+  max-height: 95%;
+  overflow-y: auto;
+
+  background-color: white;
+  border-radius: 9px;
+
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 4rem 6rem rgba(0, 0, 0, 0.25);
+  z-index: 1010;
+  transition: all 0.5s;
+
+  .subForm5Btn--close-modal {
+    font-family: inherit;
+    color: inherit;
+    position: absolute;
+    top: 0.5rem;
+    right: 1.6rem;
+    font-size: 3.5rem;
+    cursor: pointer;
+    border: none;
+    background: none;
+  }
+}
+
+.subForm5Overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 1005;
+  transition: all 0.5s;
+}
+
+.subForm5Hidden {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.subForm5Upload {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem 6rem;
+
+  &__column {
+    display: grid;
+    grid-template-columns: 1fr 2.8fr;
+    align-items: center;
+    gap: 1.5rem;
+
+    & label {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: inherit;
+    }
+
+    & input {
+      font-size: 1.5rem;
+      padding: 0.8rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+
+      &::placeholder {
+        color: $color-grey-light-3;
+      }
+
+      &:focus {
+        outline: none;
+        border: 1px solid $color-primary;
+        background-color: $color-grey-light-1;
+      }
+    }
+
+    & button {
+      grid-column: 1 / span 2;
+      justify-self: center;
+      margin-top: 1rem;
+    }
+  }
+
+  &__heading {
+    font-size: 2.25rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    grid-column: 1/-1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 5rem;
+  }
+
+  &__btn {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+}
+
+.subForm6Add-recipe-window {
+  position: absolute;
+  top: 1%;
+  left: 1%;
+  right: 1%;
+  max-height: 95%;
+  overflow-y: auto;
+
+  background-color: white;
+  border-radius: 9px;
+
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 4rem 6rem rgba(0, 0, 0, 0.25);
+  z-index: 1010;
+  transition: all 0.5s;
+
+  .subForm6Btn--close-modal {
+    font-family: inherit;
+    color: inherit;
+    position: absolute;
+    top: 0.5rem;
+    right: 1.6rem;
+    font-size: 3.5rem;
+    cursor: pointer;
+    border: none;
+    background: none;
+  }
+}
+
+.subForm6Overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 1005;
+  transition: all 0.5s;
+}
+
+.subForm6Hidden {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.subForm6Upload {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem 6rem;
+
+  &__column {
+    display: grid;
+    grid-template-columns: 1fr 2.8fr;
+    align-items: center;
+    gap: 1.5rem;
+
+    & label {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: inherit;
+    }
+
+    & input {
+      font-size: 1.5rem;
+      padding: 0.8rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+
+      &::placeholder {
+        color: $color-grey-light-3;
+      }
+
+      &:focus {
+        outline: none;
+        border: 1px solid $color-primary;
+        background-color: $color-grey-light-1;
+      }
+    }
+
+    & button {
+      grid-column: 1 / span 2;
+      justify-self: center;
+      margin-top: 1rem;
+    }
+  }
+
+  &__heading {
+    font-size: 2.25rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    grid-column: 1/-1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 5rem;
+  }
+
+  &__btn {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+}
+
+.subForm7Add-recipe-window {
+  position: absolute;
+  top: 1%;
+  left: 1%;
+  right: 1%;
+  max-height: 95%;
+  overflow-y: auto;
+
+  background-color: white;
+  border-radius: 9px;
+
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 4rem 6rem rgba(0, 0, 0, 0.25);
+  z-index: 1010;
+  transition: all 0.5s;
+
+  .subForm7Btn--close-modal {
+    font-family: inherit;
+    color: inherit;
+    position: absolute;
+    top: 0.5rem;
+    right: 1.6rem;
+    font-size: 3.5rem;
+    cursor: pointer;
+    border: none;
+    background: none;
+  }
+}
+
+.subForm7Overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 1005;
+  transition: all 0.5s;
+}
+
+.subForm7Hidden {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.subForm7Upload {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem 6rem;
+
+  &__column {
+    display: grid;
+    grid-template-columns: 1fr 2.8fr;
+    align-items: center;
+    gap: 1.5rem;
+
+    & label {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: inherit;
+    }
+
+    & input {
+      font-size: 1.5rem;
+      padding: 0.8rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+
+      &::placeholder {
+        color: $color-grey-light-3;
+      }
+
+      &:focus {
+        outline: none;
+        border: 1px solid $color-primary;
+        background-color: $color-grey-light-1;
+      }
+    }
+
+    & button {
+      grid-column: 1 / span 2;
+      justify-self: center;
+      margin-top: 1rem;
+    }
+  }
+
+  &__heading {
+    font-size: 2.25rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    grid-column: 1/-1;
+  }
+
+  &__btn {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+}
+
+.subForm8Add-recipe-window {
+  position: absolute;
+  top: 1%;
+  left: 1%;
+  right: 1%;
+  max-height: 95%;
+  overflow-y: auto;
+
+  background-color: white;
+  border-radius: 9px;
+
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 4rem 6rem rgba(0, 0, 0, 0.25);
+  z-index: 1010;
+  transition: all 0.5s;
+
+  .subForm8Btn--close-modal {
+    font-family: inherit;
+    color: inherit;
+    position: absolute;
+    top: 0.5rem;
+    right: 1.6rem;
+    font-size: 3.5rem;
+    cursor: pointer;
+    border: none;
+    background: none;
+  }
+}
+
+.subForm8Overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 1005;
+  transition: all 0.5s;
+}
+
+.subForm8Hidden {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.subForm8Upload {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem 6rem;
+
+  &__column {
+    display: grid;
+    grid-template-columns: 1fr 2.8fr;
+    align-items: center;
+    gap: 1.5rem;
+
+    & label {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: inherit;
+    }
+
+    & input {
+      font-size: 1.5rem;
+      padding: 0.8rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+
+      &::placeholder {
+        color: $color-grey-light-3;
+      }
+
+      &:focus {
+        outline: none;
+        border: 1px solid $color-primary;
+        background-color: $color-grey-light-1;
+      }
+    }
+
+    & button {
+      grid-column: 1 / span 2;
+      justify-self: center;
+      margin-top: 1rem;
+    }
+  }
+
+  &__heading {
+    font-size: 2.25rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    grid-column: 1/-1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 5rem;
+  }
+
+  &__btn {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+}
+
+.subForm9Add-recipe-window {
+  position: absolute;
+  top: 1%;
+  left: 1%;
+  right: 1%;
+  max-height: 95%;
+  overflow-y: auto;
+
+  background-color: white;
+  border-radius: 9px;
+
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 4rem 6rem rgba(0, 0, 0, 0.25);
+  z-index: 1010;
+  transition: all 0.5s;
+
+  .subForm9Btn--close-modal {
+    font-family: inherit;
+    color: inherit;
+    position: absolute;
+    top: 0.5rem;
+    right: 1.6rem;
+    font-size: 3.5rem;
+    cursor: pointer;
+    border: none;
+    background: none;
+  }
+}
+
+.subForm9Overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 1005;
+  transition: all 0.5s;
+}
+
+.subForm9Hidden {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.subForm9Upload {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem 6rem;
+
+  &__column {
+    display: grid;
+    grid-template-columns: 1fr 2.8fr;
+    align-items: center;
+    gap: 1.5rem;
+
+    & label {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: inherit;
+    }
+
+    & input {
+      font-size: 1.5rem;
+      padding: 0.8rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+
+      &::placeholder {
+        color: $color-grey-light-3;
+      }
+
+      &:focus {
+        outline: none;
+        border: 1px solid $color-primary;
+        background-color: $color-grey-light-1;
+      }
+    }
+
+    & button {
+      grid-column: 1 / span 2;
+      justify-self: center;
+      margin-top: 1rem;
+    }
+  }
+
+  &__heading {
+    font-size: 2.25rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    grid-column: 1/-1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 5rem;
+  }
+
+  &__btn {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+}
+
+.subForm10Add-recipe-window {
+  position: absolute;
+  top: 1%;
+  left: 1%;
+  right: 1%;
+  max-height: 95%;
+  overflow-y: auto;
+
+  background-color: white;
+  border-radius: 9px;
+
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 4rem 6rem rgba(0, 0, 0, 0.25);
+  z-index: 1010;
+  transition: all 0.5s;
+
+  .subForm10Btn--close-modal {
+    font-family: inherit;
+    color: inherit;
+    position: absolute;
+    top: 0.5rem;
+    right: 1.6rem;
+    font-size: 3.5rem;
+    cursor: pointer;
+    border: none;
+    background: none;
+  }
+}
+
+.subForm10Overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 1005;
+  transition: all 0.5s;
+}
+
+.subForm10Hidden {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.subForm10Upload {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem 6rem;
+
+  &__column {
+    display: grid;
+    grid-template-columns: 1fr 2.8fr;
+    align-items: center;
+    gap: 1.5rem;
+
+    & label {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: inherit;
+    }
+
+    & input {
+      font-size: 1.5rem;
+      padding: 0.8rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+
+      &::placeholder {
+        color: $color-grey-light-3;
+      }
+
+      &:focus {
+        outline: none;
+        border: 1px solid $color-primary;
+        background-color: $color-grey-light-1;
+      }
+    }
+
+    & button {
+      grid-column: 1 / span 2;
+      justify-self: center;
+      margin-top: 1rem;
+    }
+  }
+
+  &__heading {
+    font-size: 2.25rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    grid-column: 1/-1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 5rem;
+  }
+
+  &__btn {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+}
+
+.subForm11Add-recipe-window {
+  position: absolute;
+  top: 1%;
+  left: 1%;
+  right: 1%;
+  max-height: 95%;
+  overflow-y: auto;
+
+  background-color: white;
+  border-radius: 9px;
+
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 4rem 6rem rgba(0, 0, 0, 0.25);
+  z-index: 1010;
+  transition: all 0.5s;
+
+  .subForm11Btn--close-modal {
+    font-family: inherit;
+    color: inherit;
+    position: absolute;
+    top: 0.5rem;
+    right: 1.6rem;
+    font-size: 3.5rem;
+    cursor: pointer;
+    border: none;
+    background: none;
+  }
+}
+
+.subForm11Overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 1005;
+  transition: all 0.5s;
+}
+
+.subForm11Hidden {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.subForm11Upload {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem 6rem;
+
+  &__column {
+    display: grid;
+    grid-template-columns: 1fr 2.8fr;
+    align-items: center;
+    gap: 1.5rem;
+
+    & label {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: inherit;
+    }
+
+    & input {
+      font-size: 1.5rem;
+      padding: 0.8rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+
+      &::placeholder {
+        color: $color-grey-light-3;
+      }
+
+      &:focus {
+        outline: none;
+        border: 1px solid $color-primary;
+        background-color: $color-grey-light-1;
+      }
+    }
+
+    & button {
+      grid-column: 1 / span 2;
+      justify-self: center;
+      margin-top: 1rem;
+    }
+  }
+
+  &__heading {
+    font-size: 2.25rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    grid-column: 1/-1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 5rem;
+  }
+
+  &__btn {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+}
+
+.subForm12Add-recipe-window {
+  position: absolute;
+  top: 1%;
+  left: 1%;
+  right: 1%;
+  max-height: 95%;
+  overflow-y: auto;
+
+  background-color: white;
+  border-radius: 9px;
+
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 4rem 6rem rgba(0, 0, 0, 0.25);
+  z-index: 1010;
+  transition: all 0.5s;
+
+  .subForm12Btn--close-modal {
+    font-family: inherit;
+    color: inherit;
+    position: absolute;
+    top: 0.5rem;
+    right: 1.6rem;
+    font-size: 3.5rem;
+    cursor: pointer;
+    border: none;
+    background: none;
+  }
+}
+
+.subForm12Overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 1005;
+  transition: all 0.5s;
+}
+
+.subForm12Hidden {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.subForm12Upload {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem 6rem;
+
+  &__column {
+    display: grid;
+    grid-template-columns: 1fr 2.8fr;
+    align-items: center;
+    gap: 1.5rem;
+
+    & label {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: inherit;
+    }
+
+    & input {
+      font-size: 1.5rem;
+      padding: 0.8rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+
+      &::placeholder {
+        color: $color-grey-light-3;
+      }
+
+      &:focus {
+        outline: none;
+        border: 1px solid $color-primary;
+        background-color: $color-grey-light-1;
+      }
+    }
+
+    & button {
+      grid-column: 1 / span 2;
+      justify-self: center;
+      margin-top: 1rem;
+    }
+  }
+
+  &__heading {
+    font-size: 2.25rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    grid-column: 1/-1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 5rem;
+  }
+
+  &__btn {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+}
+
+.subFormIndicatorAdd-recipe-window {
+  position: absolute;
+  top: 15%;
+  left: 40%;
+  right: 40%;
+  min-height: 35%;
+  overflow-y: auto;
+  display: grid;
+
+  background-color: white;
+  border-radius: 9px;
+
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 4rem 6rem rgba(0, 0, 0, 0.25);
+  z-index: 1010;
+  transition: all 0.5s;
+
+  .subFormIndicatorBtn--close-modal {
+    font-family: inherit;
+    color: inherit;
+    position: absolute;
+    top: 0.5rem;
+    right: 1.6rem;
+    font-size: 3.5rem;
+    cursor: pointer;
+    border: none;
+    background: none;
+  }
+}
+
+.subFormIndicatorOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 1005;
+  transition: all 0.5s;
+}
+
+.subFormIndicatorHidden {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.subFormIndicatorUpload {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem 6rem;
+  font-family: inherit;
+
+  &__column {
+    display: grid;
+    grid-template-columns: 1fr 2.8fr;
+    align-items: center;
+    gap: 1.5rem;
+
+    & label {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: inherit;
+    }
+
+    & input {
+      font-size: 1.5rem;
+      padding: 0.8rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+
+      &::placeholder {
+        color: $color-grey-light-3;
+      }
+
+      &:focus {
+        outline: none;
+        border: 1px solid $color-primary;
+        background-color: $color-grey-light-1;
+      }
+    }
+
+    & button {
+      grid-column: 1 / span 2;
+      justify-self: center;
+      margin-top: 1rem;
+    }
+  }
+
+  &__heading {
+    font-size: 2.25rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    grid-column: 1/-1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 5rem;
+  }
+
+  &__btn {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+}
+///// Stop subForm
+
+/// Start PickingGrid
+.pickingGrid > * {
+  position: relative;
+}
+
+.pickingGrid {
+  display: grid;
+  grid-template-columns: [col-start] auto [col-end];
+  grid-template-rows: [header-start] 50px [header-end row-start] auto [row-end];
+  grid-auto-rows: auto;
+  grid-auto-columns: auto;
+  grid-gap: 1px;
+  overflow: hidden;
+  background-color: #37b24d;
+  border-radius: 0.5rem;
+
+  & label,
+  &__heading {
+    font-size: 1.5rem;
+    font-weight: 600;
+    border-bottom: 1px inset #ccc;
+    grid-row: header;
+    text-align: center;
+  }
+
+  &__heading span {
+    color: #ebfbee;
+    font-weight: 600;
+    font-size: 1.5rem;
+  }
+
+  &__text {
+    font-size: 1.25rem;
+    color: inherit;
+    border-bottom: 1px solid #ccc;
+    padding: 0.1rem;
+  }
+
+  &__action {
+    display: flex;
+    align-self: stretch;
+    align-content: center;
+    justify-content: center;
+    border-bottom: 1px solid #ccc;
+    padding: 0.1rem;
+  }
+
+  &__icon,
+  &__child-item-icon {
+    width: 1.75rem;
+    height: 1.75rem;
+    fill: currentColor;
+  }
+
+  &__action:hover {
+    cursor: pointer;
+  }
+
+  & input {
+    font-size: 1.5rem;
+    padding: 0.8rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+
+    &::placeholder {
+      color: $color-grey-light-3;
+    }
+
+    &:focus {
+      outline: none;
+      border: 1px solid $color-primary;
+      background-color: $color-grey-light-1;
+    }
+  }
+
+  & button {
+    grid-column: 1 / span 2;
+    justify-self: center;
+  }
+}
+
+.gridRowEven {
+  background-color: #ebfbee;
+}
+
+.gridRowEven span {
+  position: relative;
+  z-index: 2;
+}
+
+.gridRowEven:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: -1000%;
+  left: -1000%;
+  z-index: 1;
+}
+
+.gridRowEven:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: -1px;
+  width: 1px;
+  z-index: 2;
+  background-color: #fff;
+}
+
+.gridRowEven:hover::before,
+.gridRowEven span:hover {
+  background-color: #d3f9d8;
+  cursor: pointer;
+}
+
+.pickingGrid4 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 2fr 0.5fr;
+  align-items: center;
+  gap: 0.5rem 0;
+
+  & label {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: inherit;
+    border-bottom: 1px inset #ccc;
+  }
+
+  &__text {
+    font-size: 1.25rem;
+    color: inherit;
+  }
+
+  &__action:hover {
+    cursor: pointer;
+  }
+
+  & input {
+    font-size: 1.5rem;
+    padding: 0.8rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+
+    &::placeholder {
+      color: $color-grey-light-3;
+    }
+
+    &:focus {
+      outline: none;
+      border: 1px solid $color-primary;
+      background-color: $color-grey-light-1;
+    }
+  }
+
+  & button {
+    grid-column: 1 / span 2;
+    justify-self: center;
+    margin-top: 1rem;
+  }
+}
+
+.pickingGrid5 {
+  display: grid;
+  grid-template-columns: 1.5fr 1.5fr 1.5fr 0.25fr 0.25fr 0.25fr 0.25fr 0.25 0.25;
+  align-items: center;
+  gap: 0.5rem 0;
+
+  & label {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: inherit;
+    border-bottom: 1px inset #ccc;
+  }
+
+  &__text {
+    font-size: 1.25rem;
+    color: inherit;
+  }
+
+  &__action:hover {
+    cursor: pointer;
+  }
+
+  & input {
+    font-size: 1.5rem;
+    padding: 0.8rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+
+    &::placeholder {
+      color: $color-grey-light-3;
+    }
+
+    &:focus {
+      outline: none;
+      border: 1px solid $color-primary;
+      background-color: $color-grey-light-1;
+    }
+  }
+
+  & button {
+    grid-column: 1 / span 2;
+    justify-self: center;
+    margin-top: 1rem;
+  }
+}
+
+.pickingGrid6 {
+  display: grid;
+  grid-template-columns: 1.5fr 1.5fr 1.5fr 0.25fr 0.25fr 0.25fr 0.25fr 0.25 0.25;
+  align-items: center;
+  gap: 0.5rem 0;
+
+  & label {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: inherit;
+    border-bottom: 1px inset #ccc;
+  }
+
+  &__text {
+    font-size: 1.25rem;
+    color: inherit;
+  }
+
+  &__action:hover {
+    cursor: pointer;
+  }
+
+  & input {
+    font-size: 1.5rem;
+    padding: 0.8rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+
+    &::placeholder {
+      color: $color-grey-light-3;
+    }
+
+    &:focus {
+      outline: none;
+      border: 1px solid $color-primary;
+      background-color: $color-grey-light-1;
+    }
+  }
+
+  & button {
+    grid-column: 1 / span 2;
+    justify-self: center;
+    margin-top: 1rem;
+  }
+}
+/// Stop PickingGrid
+
+.formUploadFull {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem 5rem;
+  align-items: baseline;
+
+  &__column {
+    display: grid;
+    grid-template-columns: 1fr 2.8fr;
+    align-items: center;
+    gap: 0.5rem;
+
+    & label {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: inherit;
+    }
+
+    & input,
+    & select,
+    & textarea {
+      font-size: 1.5rem;
+      padding: 0.8rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+
+      &::placeholder {
+        color: $color-grey-light-3;
+      }
+
+      &:focus {
+        outline: none;
+        border: 1px solid $color-primary;
+        background-color: $color-grey-light-1;
+      }
+    }
+
+    & button {
+      grid-column: 1 / span 2;
+      justify-self: center;
+      margin-top: 1rem;
+      letter-spacing: 0.25rem;
+    }
+  }
+
+  &__column--3 {
+    display: grid;
+    grid-template-columns: 0.85fr 2.8fr;
+    align-items: center;
+    gap: 0.525rem;
+
+    & label {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: inherit;
+    }
+
+    & input,
+    & select,
+    & datalist {
+      font-size: 1.5rem;
+      padding: 0.8rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+
+      &::placeholder {
+        color: $color-grey-light-3;
+      }
+
+      &:focus {
+        outline: none;
+        border: 1px solid $color-primary;
+        background-color: $color-grey-light-1;
+      }
+    }
+
+    & button {
+      grid-column: 1 / span 2;
+      justify-self: center;
+      margin-top: 1rem;
+    }
+  }
+
+  &__heading {
+    font-size: 2rem;
+    text-transform: uppercase;
+    grid-column: 1/-1;
+  }
+
+  &__btn {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+
+  &__btnSub {
+    justify-self: center;
+    grid-column: 2 / 3;
+  }
+
+  &__radio-group {
+    width: 25%;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+    /**
+        @include respond(tab-port){
+            width:100%;
+            margin-bottom: 2rem;
+        }
+        */
+  }
+
+  &__radio-input {
+    display: none;
+  }
+
+  &__radio-label {
+    font-size: $default-font-size;
+    cursor: pointer;
+    position: relative;
+    padding-left: 4.5rem;
+  }
+
+  &__radio-button {
+    height: 3rem;
+    width: 3rem;
+    border: 5px solid $color-primary;
+    border-radius: 50%;
+    display: inline-block;
+    position: absolute;
+    left: 0;
+    top: -0.4rem;
+
+    &::after {
+      content: "";
+      display: block;
+      height: 1.3rem;
+      width: 1.3rem;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: $color-primary;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+  }
+
+  &__radio-input:checked ~ &__radio-label &__radio-button::after {
+    opacity: 1;
+  }
+}

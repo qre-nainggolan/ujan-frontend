@@ -1,0 +1,559 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portal</title>
+    <style>
+      @font-face {
+        font-family: "Poppins";
+        src: url("/src/fonts/Poppins-Regular.ttf") format("truetype");
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Poppins";
+        src: url("/src/fonts/Poppins-Bold.ttf") format("truetype");
+        font-weight: 700;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Poppins";
+        src: url("/src/fonts/Poppins-Light.ttf") format("truetype");
+        font-weight: 300;
+        font-style: normal;
+      }
+
+      html {
+        font-size: 62.5%;
+        box-sizing: border-box;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: inherit;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        line-height: 1.6;
+        box-sizing: border-box;
+      }
+
+      .layout {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      .layout__header {
+        height: 5rem;
+        background-color: #3f51b5;
+        color: white;
+        position: sticky;
+        top: 0;
+        right: 0;
+        left: 0;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 2rem;
+        box-shadow: 0 6px 16px rgba(33, 150, 243, 0.5);
+        z-index: 1000;
+      }
+
+      .layout__header-text {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        margin-left: 22rem;
+        color: #fff;
+        font-weight: 600;
+        font-size: 3rem;
+        letter-spacing: 0.2rem;
+        box-sizing: border-box;
+        transition: all 0.35s;
+      }
+
+      .layout__body {
+        display: flex;
+        background-color: #1e88e5;
+        flex: 1;
+        position: relative;
+      }
+
+      .layout__nav-checkbox {
+        display: none;
+      }
+
+      .layout__nav-button {
+        position: fixed;
+        width: 3.55rem;
+        height: 3.55rem;
+        top: 0.65rem;
+        left: 17rem;
+        border-radius: 15%;
+        z-index: 2000;
+        box-shadow: 0 2px 10px rgba(0, 8, 14, 0.5);
+        background-color: #fff;
+        text-align: center;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.35s;
+      } 
+
+      .layout__nav-background {
+        position: fixed;
+        width: 2.55rem;
+        height: 2.55rem;
+        left: 17.5rem;
+        top: 0.85rem;
+        border-radius: 15%;
+        background-image: radial-gradient(#42a5f5, #1e88e5);
+        z-index: 1000;
+        transition: all 0.35s;
+      }
+
+      .layout__nav-icon {
+        position: relative;
+      }
+
+      .layout__nav-icon {
+        height: 2px;
+        width: 3rem;
+        background-color: black;
+        display: inline-block;
+      }
+
+      .layout__nav-icon::before,
+      .layout__nav-icon::after {
+        height: 2px;
+        width: 2.5rem;
+        margin-left: 0.5rem;
+        background-color: black;
+        display: inline-block;
+      }
+
+      .layout__nav-icon::before,
+      .layout__nav-icon::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        transition: all 0.1s;
+      }
+
+      .layout__nav-icon::before {
+        top: 0.6rem;
+      }
+
+      .layout__nav-icon::after {
+        top: -0.6rem;
+      }
+
+      .layout__nav-button:hover .layout__nav-icon,
+      .layout__nav-button:hover .layout__nav-icon::before,
+      .layout__nav-button:hover .layout__nav-icon::after {
+        background-color: #3f51b5;
+      }
+
+      .layout__nav-button:hover .layout__nav-icon::before {
+        top: 0.4rem;
+        width: 3rem;
+        margin-left: 0rem;
+      }
+
+      .layout__nav-button:hover .layout__nav-icon::after {
+        top: -0.4rem;
+        width: 3rem;
+        margin-left: 0rem;
+      }
+
+      .layout__nav-checkbox:checked
+        ~ .layout__header
+        .layout__nav-button
+        .layout__nav-icon::before,
+      .layout__nav-checkbox:checked
+        ~ .layout__header
+        .layout__nav-button
+        .layout__nav-icon::after {
+        width: 3rem;
+        margin-left: 0rem;
+      }
+
+      .layout__nav-checkbox:checked ~ .layout__header .layout__nav-button {
+        top: 0.65rem;
+        left: 0.3rem;
+        transition: all 0.35s;
+      }
+
+      .layout__nav-checkbox:checked ~ .layout__header .layout__nav-background {
+        top: 0.65rem;
+        left: 0.5rem;
+        transition: all 0.35s;
+      }
+
+      .layout__nav-checkbox:checked ~ .layout__header .layout__header-text {
+        margin-left: 5.2rem;
+        transition: all 0.35s;
+      }
+
+      @media only screen and (max-width: 37.5rem) {
+        .layout__nav-button {
+          top: 0rem;
+          left: 0rem;
+        }
+
+        .layout__nav-background {
+          top: 0.5rem;
+          left: 0.5rem;
+        }
+      }
+
+      .layout__nav-lane {
+        padding: 0rem;
+        background-color: #1e88e5;
+        box-sizing: border-box;
+        width: 21rem;
+        transition: width 0.5s;
+        color: white;
+        position: fixed;
+        top: 5.1rem;
+        bottom: 0;
+        left: 0;
+        z-index: 1100;
+      }
+
+      .layout__main {
+        flex-grow: 1;
+        background-color: #fcf8ef;
+        transition: margin-left 0.5s;
+        margin-left: 21rem;
+        padding-left: 1.75rem;
+        padding-top: 1.75rem;
+        z-index: 1;
+        border-top-left-radius: 2.5%;
+        border-bottom-left-radius: 0.75%;
+        border-bottom-right-radius: 0.75%;
+        max-height: calc(100vh - 6.85rem); /* header height */
+        overflow-y: auto;
+      }
+
+      .layout__footer {
+        box-shadow: 0 -4px 25px rgba(33, 150, 243, 0.5);
+        background-color: #03036b;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-sizing: border-box;
+        z-index: 2001;
+      }
+
+      .layout__nav-checkbox:checked ~ .layout__body .layout__nav-lane {
+        width: 5rem;
+        padding-left:.5rem;
+        transition: all 0.4s;
+      }
+
+      .layout__nav-checkbox:checked ~ .layout__body .layout__main {
+        transition: all 0.4s;
+        margin-left: 5rem;
+      }
+
+      .nav-menu {
+        list-style: none;
+        padding-top: 0.35rem;
+        padding-left: 0;
+        font-size: 1.5rem;
+        color: white;
+        transition: all 0.5s;
+        width: 100%;
+        left: 0;
+        right: 0;
+      }
+
+      .nav-menu li:hover > ul,
+      .nav-menu li ul:hover,
+      .nav-menu li ul li:hover > ul {
+        display: block;
+      }
+
+      .nav-menu li {
+        position: relative;
+        box-sizing: border-box;
+        text-indent: 0.45rem;
+      }
+
+      .nav-menu li ul {
+        position: absolute;
+        top: 0;
+        left: 100%;
+        display: none;
+        min-width: 160px;
+        background-color: #1e88e5;
+        box-sizing: border-box;
+      }
+
+      .nav-menu > li {
+        position: relative;
+        box-sizing: border-box;
+        transition: all 0.5s;
+        width: 100%;
+      }
+
+      .nav-menu li a {
+        display: block;
+        padding: 1.5rem 0rem;
+        width: 100%;
+        text-decoration: none;
+        color: white;
+        font-weight: 500;
+        transition: background-color 0.3s;
+        box-sizing: border-box;
+      }
+
+      .nav-menu li a:hover {
+        color: #8afa8b;
+        transition: all 0.25s;
+        box-sizing: border-box;
+      }
+
+      .nav-menu li:hover > ul {
+        display: block;
+        margin: 0;
+        padding: 0;
+        transition: all 0.25s;
+        box-sizing: border-box;
+      }
+
+      .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 1.2rem;
+        line-height: 1;
+        text-decoration: none;
+      }
+
+      .menu-icon {
+        margin-left:1rem;
+        width: 2rem;
+        height: 2rem;
+        display: inline-block;
+        flex-shrink: 0;
+        vertical-align: middle;
+        margin-top: -0.1rem; /* fine-tune alignment */
+        fill: currentColor;
+      }
+
+      .menu-text {
+        font-size: 1.6rem;
+        line-height: 1;
+        display: inline-block;
+        vertical-align: middle;
+        color: inherit;
+      }
+
+      .nav-menu li ul:hover {
+        box-sizing: border-box;
+        display: block;
+      }
+
+      /* When collapsed: hide text, center icon */
+      .layout__nav-checkbox:checked
+        ~ .layout__body
+        .layout__nav-lane
+        .menu-text {
+        display: none;
+        transition: all 0.5s;
+      }
+
+      .layout__nav-checkbox:checked
+        ~ .layout__body
+        .layout__nav-lane
+        .menu-icon {
+        display: inline-block;
+        margin: 0 auto;
+        transition: all 0.5s;
+      }
+
+      .panel__preview {
+        height: 12.5rem;
+        width: 30rem;
+        background-color: #1bd084;
+        border-radius: 0.75rem;
+        margin: 0.5rem;
+        margin-left: 0;
+        margin-top:4rem;        
+        display: inline-block;
+        cursor: pointer;
+        box-shadow: 0 2px 10px rgba(33, 150, 243, 0.5);
+        transition: all 0.5s;
+      }
+
+      .panel__preview--large {
+        width: 61rem;
+        display: flex;
+      }
+
+      .panel__preview-small{
+        height:10rem;
+        width:20rem;
+      }
+
+      .panel__preview:hover,
+      .panel__preview:hover .panel__preview-content .panel__icon  {
+        background-color: #8bc740;
+        transition: all 0.5s;        
+      }
+
+      .panel__preview-content {
+        display: flex;
+        flex:2;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        height: 100%;
+        padding: 1rem 1rem;
+        box-sizing: border-box;
+        
+      }
+
+      .panel__icon {
+        background-color: #1bd084;
+        border-top-left-radius: 10%;
+        border-top-right-radius: 10%;
+        padding:1rem;
+        margin-top:-12rem;
+        width: 6rem;
+        height: 6rem;
+        color: #fff;
+        fill: #1f1c1c;
+        transition: all 0.5s;
+
+      }
+
+      .panel__icon-small {
+        width: 6rem;
+        height: 6rem;        
+        border-top-left-radius: 0%;
+        border-top-right-radius: 0%;
+        padding:0;  
+        margin:0;
+        background-color: none;      
+        fill: #fff;
+      }
+
+      .panel__summary {
+        font-size: 2.5rem;
+        font-weight: 600;
+        color: white;
+        text-align: left;
+        padding-left: 5rem;    
+      }
+
+      .panel__summary-h3{      
+        font-size: 3em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <!-- Navigation toggle checkbox -->
+      <input type="checkbox" checked="checked" id="nav-toggle" class="layout__nav-checkbox" />
+
+      <!-- Header -->
+      <header class="layout__header">
+        <label for="nav-toggle" class="layout__nav-button">
+          <span class="layout__nav-icon">&nbsp;</span>
+        </label>
+        <div class="layout__nav-background">&nbsp;</div>
+        <div class="layout__header-text">IoT Portal</div>
+      </header>
+
+      <!-- Main layout body: nav + content -->
+      <div class="layout__body">
+        <nav class="layout__nav-lane">
+          <ul class="nav-menu">
+            <li>
+              <a href="index2.html" class="nav-link">
+                <svg class="menu-icon">
+                  <use xlink:href="/src/SVG/sprite.svg#icon-home"></use>
+                </svg>
+                <span class="menu-text">Dashboard</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="nav-link">
+                <svg class="menu-icon">
+                  <use xlink:href="/src/SVG/sprite.svg#icon-stack"></use>
+                </svg>
+                <span class="menu-text">Paket IoT</span>
+              </a>
+              <ul>
+                <li>
+                  <a href="simulasi.html">Simulasi</a>
+                </li>
+                <li><a href="#">Roles</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#" class="nav-link">
+                <svg class="menu-icon">
+                  <use xlink:href="/src/SVG/sprite.svg#icon-stats-dots"></use>
+                </svg>
+                <span class="menu-text">Perkembangan</span>
+              </a>
+              <ul>
+                <li>
+                  <a href="#">System</a>
+                  <ul>
+                    <li><a href="#">Backup</a></li>
+                    <li><a href="#">Restore</a></li>
+                  </ul>
+                </li>
+                <li><a href="#">Preferences</a></li>
+              </ul>
+            </li>            
+            <li>
+              <a href="#" class="nav-link">
+                <svg class="menu-icon">
+                  <use xlink:href="/src/SVG/sprite.svg#icon-cog"></use>
+                </svg>
+                <span class="menu-text">Kelola Akun</span>
+              </a>
+              </a>
+              <ul>
+                <li>
+                  <a href="#">System</a>
+                  <ul>
+                    <li><a href="#">Backup</a></li>
+                    <li><a href="#">Restore</a></li>
+                  </ul>
+                </li>
+                <li><a href="#">Preferences</a></li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+        <main class="layout__main">
+          <h1>Simulasi Paket IoT</h1>
+          <div class="panel__preview panel__preview-small">
+            <div class="panel__preview-content">
+              <svg class="panel__icon panel__icon-small">
+                <use xlink:href="/src/SVG/sprite.svg#icon-check"></use>
+              </svg>
+              <span class="panel__summary panel__summary-h3">45:00</span>
+            </div>
+          </div>
+        </main>
+      </div>
+      <!-- Footer -->
+      <footer class="layout__footer">&copy; ANE</footer>
+    </div>
+  </body>
+</html>
