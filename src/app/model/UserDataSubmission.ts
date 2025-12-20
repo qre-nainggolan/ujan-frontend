@@ -1,6 +1,7 @@
 import { UserProfile } from "./UserProfile";
 
 export class UserDataSubmissionValues {
+  userType: string = "";
   userID: string = "";
   nama_User: string = "";
   fingerprint: string = "";
@@ -15,6 +16,7 @@ export class UserDataSubmissionValues {
 
   constructor(activity?: UserDataSubmissionValues) {
     if (activity) {
+      this.userType = activity.userType;
       this.userID = activity.userID;
       this.nama_User = activity.nama_User;
       this.fingerprint = activity.fingerprint;
@@ -31,6 +33,7 @@ export class UserDataSubmissionValues {
 }
 
 export class UserDataSubmission implements UserProfile {
+  userType: string = "";
   userID: string = "";
   nama_User: string = "";
   fingerprint: string = "";

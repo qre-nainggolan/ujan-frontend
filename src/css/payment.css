@@ -1,0 +1,177 @@
+.payment-container {
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(135deg, #001f3f, #003366, #0080ff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.payment-card {
+  width: 420px;
+  padding: 32px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  text-align: center;
+  transition: 0.4s ease-in-out;
+}
+
+.payment-card.pending {
+  border: 2px solid rgba(255, 255, 255, 0.25);
+}
+
+.payment-card.paid {
+  border: 2px solid #10ff70;
+  background: rgba(0, 255, 100, 0.15);
+}
+
+.payment-card.failed {
+  border: 2px solid #ff4444;
+  background: rgba(255, 0, 0, 0.15);
+}
+
+.title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.loader {
+  border: 6px solid rgba(255, 255, 255, 0.2);
+  border-top: 6px solid #ffdd57;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  margin: 20px auto;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.success-checkmark {
+  font-size: 70px;
+  color: #10ff70;
+  animation: pop 0.4s ease-out;
+}
+
+.failed-x {
+  font-size: 70px;
+  color: #ff4444;
+  animation: pop 0.4s ease-out;
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.details {
+  margin-top: 25px;
+  color: #eaeaea;
+  font-size: 1rem;
+}
+
+.return-btn {
+  margin-top: 28px;
+  padding: 12px 20px;
+  width: 100%;
+  font-size: 1rem;
+  background: #ffdd57;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.return-btn:hover {
+  background: #ffe680;
+  transform: translateY(-2px);
+}
+
+.waiting-container {
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(120deg, #58583c, #3b3b0d, #005b21);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.waiting-card {
+  padding: 3.2rem;
+  width: 38rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 0.8rem 3rem rgba(0, 0, 0, 0.25);
+  color: white;
+  text-align: center;
+}
+
+.waiting-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.waiting-spinner {
+  width: 7rem;
+  height: 7rem;
+  border: 0.6rem solid rgba(255, 255, 255, 0.3);
+  border-top: 0.6rem solid #ffdd57;
+  border-radius: 50%;
+  margin: 3rem auto;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.waiting-sub {
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: #e6e6e6;
+}
+
+.waiting-order {
+  margin-top: 1.6rem;
+  font-size: 1rem;
+}
+
+.waiting-status span {
+  color: #ffdd57;
+  font-weight: bold;
+}
+
+.cancel-btn {
+  margin-top: 3rem;
+  padding: 1.2rem 2rem;
+  width: 100%;
+  background: #ffdd57;
+  border: 0;
+  border-radius: 1.2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.cancel-btn:hover {
+  background: #ffe680;
+}

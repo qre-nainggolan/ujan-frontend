@@ -8,6 +8,8 @@ import PackageTypeStore from "./PackageTypeStore";
 import PurchasePackageStore from "./PurchasePackageStore";
 import AuthenticationStore from "./AuthenticationStore";
 import TestStore from "./TestStore";
+import ProgressStore from "./ProgressStore";
+import PaymentStore from "./PaymentStore";
 
 interface Store {
   CommonStore: CommonStore;
@@ -19,6 +21,8 @@ interface Store {
   PurchasePackageStore: PurchasePackageStore;
   AuthenticationStore: AuthenticationStore;
   TestStore: TestStore;
+  ProgressStore: ProgressStore;
+  PaymentStore: PaymentStore;
 }
 
 export const store: Store = {
@@ -31,6 +35,8 @@ export const store: Store = {
   PurchasePackageStore: new PurchasePackageStore(),
   AuthenticationStore: new AuthenticationStore(),
   TestStore: new TestStore(),
+  ProgressStore: new ProgressStore(),
+  PaymentStore: new PaymentStore(),
 };
 
 export const StoreContext = createContext(store);

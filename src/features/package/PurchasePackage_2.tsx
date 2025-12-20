@@ -31,7 +31,7 @@ export default function PurchasePage() {
   useEffect(() => {
     if (!packageId) return;
 
-    agent.Package.getPackage()
+    agent.UserPackage.getPackage()
       .then((response: ListUserPackage[]) => {
         const found = response.find((p) => p.package_id === packageId);
         if (found) setPkg(found); // <- now TypeScript knows found is ListUserPackage | undefined
@@ -45,7 +45,7 @@ export default function PurchasePage() {
   const handlePurchase = () => {
     if (!pkg) return;
 
-    agent.Package.purcahsePackage(
+    agent.UserPackage.purcahsePackage(
       { package_id: pkg.package_id },
       pkg.package_id
     )

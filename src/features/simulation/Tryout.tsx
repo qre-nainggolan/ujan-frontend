@@ -26,6 +26,7 @@ export default observer(function Tryout() {
     SetPopupConfirmationclass,
     TimeLeft,
     StartTryout,
+    isLoadingTryout,
   } = TryoutStore;
 
   const popupRef = useRef<HTMLDivElement>(null);
@@ -43,7 +44,7 @@ export default observer(function Tryout() {
   const confirmFinalSubmit = async () => {
     if (!SelectedChoice) return;
 
-    ConfirmFinalSubmission(localStorage.removeItem("ujanSessionId") ?? "");
+    ConfirmFinalSubmission(localStorage.getItem("ujanSessionId") ?? "");
     window.location.reload(); // or redirect
   };
 
@@ -99,22 +100,30 @@ export default observer(function Tryout() {
         <div className="layout__body">
           <NavLane />
           <main className="layout__main">
-            <h1>Simulasi - Uji coba gratis</h1>
-            {IsTryoutStarted && CurrentQuestion ? (
+            {isLoadingTryout ? (
+              <div className="spinner-wrapper">
+                <div className="spinner" />
+                <div className="spinner-message">Sedang memuat halaman...</div>
+              </div>
+            ) : IsTryoutStarted && CurrentQuestion ? (
               <>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.75rem",
-                  }}
-                >
-                  <h2 style={{ margin: 0 }}>Sisa Waktu:</h2>
-                  <h1 style={{ margin: 0 }}>
-                    {Math.floor(TimeLeft / 60)}:
-                    {String(TimeLeft % 60).padStart(2, "0")}
-                  </h1>
+                <div className="top-banner">
+                  <h1>Simulasi - Uji coba gratis</h1>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.75rem",
+                    }}
+                  >
+                    <h2 style={{ margin: 0 }}>Sisa Waktu:</h2>
+                    <h1 style={{ margin: 0 }}>
+                      {Math.floor(TimeLeft / 60)}:
+                      {String(TimeLeft % 60).padStart(2, "0")}
+                    </h1>
+                  </div>
                 </div>
+                <div className="section-divider"></div>
                 <div
                   style={{ padding: "1rem", fontFamily: "Poppins, sans-serif" }}
                 >
@@ -196,9 +205,14 @@ export default observer(function Tryout() {
             ) : (
               <>
                 <h3>
+                  {/** 
                   In this section, you will have 30 minutes to finish 100
                   questions of TKD, Please click the button "Go" to start the
                   Tryout
+                  */}
+                  Di sini anda akan punya waktu 30 menit untuk menyelesaikan 100
+                  pertanyaan, Silahkan tekan tombol "Go" untuk memulai uji
+                  coba...
                 </h3>
                 <div
                   style={{

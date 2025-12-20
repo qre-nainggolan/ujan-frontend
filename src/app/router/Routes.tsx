@@ -10,6 +10,10 @@ import PurchasePackage from "../../features/package/PurchasePackage";
 import PackageTest from "../../features/transaction/PackageTest";
 import QuestionGrid from "../../features/admin/QuestionGrid";
 import PackageGrid from "../../features/admin/PackageGrid";
+import MapDrone from "../../features/admin/MapDrone";
+import ProgressPage from "../../features/transaction/ProgressPage";
+import WaitingPaymentPage from "../../features/package/WaitingPaymentPage";
+import PaymentResultPage from "../../features/package/PurchaseResult";
 
 export const routes: RouteObject[] = [
   {
@@ -25,6 +29,10 @@ export const routes: RouteObject[] = [
       { path: "PackageTest", element: <PackageTest /> },
       { path: "QuestionGrid", element: <QuestionGrid /> },
       { path: "PackageGrid", element: <PackageGrid /> },
+      { path: "MapDrone", element: <MapDrone /> },
+      { path: "ProgressPage", element: <ProgressPage /> },
+      { path: "WaitingPage", element: <WaitingPaymentPage /> },
+      { path: "PaymentResult", element: <PaymentResultPage /> },
     ],
   },
 ];

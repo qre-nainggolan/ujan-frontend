@@ -23,6 +23,7 @@ export default class TryoutStore {
   CurrentQuestion: ItemQuestion | null = null;
   SelectedChoice: string = "";
   SessionId: string | null = null;
+  isLoadingTryout: boolean = false;
 
   data: ListQuestion[] = [];
   formData: ListQuestion | null = null;
@@ -153,6 +154,8 @@ export default class TryoutStore {
   };
 
   loadQuestion = async () => {
+    this.isLoadingTryout = true;
+
     try {
       const res = await agent.Tryout.continueTryout(
         this.SessionId!,
@@ -164,6 +167,8 @@ export default class TryoutStore {
       }
     } catch (err) {
       console.error("Failed to continue tryout:", err);
+    } finally {
+      this.isLoadingTryout = false;
     }
   };
 
@@ -174,6 +179,7 @@ export default class TryoutStore {
       sessionId: sessionId_,
       questionId: this.CurrentQuestion?.id ?? 0,
       answer: this.SelectedChoice!,
+      questionNumber: this.CurrentQuestion?.questionNumber ?? 0,
     });
 
     this.SetAnswer();
@@ -182,38 +188,57 @@ export default class TryoutStore {
   };
 
   StartTryout = async () => {
-    await agent.Tryout.startTryout().then((response) => {
-      const data = response.data;
+    this.isLoadingTryout = true;
+    try {
+      await agent.Tryout.startTryout(
+        "9228ce30-05fd-4198-a19e-86d7149472b7",
+        "TIU"
+      ).then((response) => {
+        const data = response.data;
 
-      localStorage.setItem("ujanSessionId", data.sessionId);
-      this.SetCurrentQuestion(data.question);
-      this.SetIsTryoutStarted(true);
-      this.SetSessionId(data.sessionId);
-
-      this.startTimer(); // ✅ start countdown
-    });
+        localStorage.setItem("ujanSessionId", data.sessionId);
+        this.SetCurrentQuestion(data.question);
+        this.SetIsTryoutStarted(true);
+        this.SetSessionId(data.sessionId);
+        this.setTimeLeft(1800);
+        this.startTimer(); // ✅ start countdown
+      });
+    } catch (err) {
+      console.error("Failed to start tryout");
+    } finally {
+      this.isLoadingTryout = false;
+    }
   };
 
   ConfirmFinalSubmission = async (sessionId_: string) => {
     if (!this.SelectedChoice) return;
 
+    if (sessionId_ === "") {
+      alert("failed");
+      return false;
+    }
     try {
+      this.isLoadingTryout = true;
       await agent.Tryout.submitFinalAnswer({
         sessionId: sessionId_,
         questionId: this.CurrentQuestion?.id ?? 0,
+        questionNumber: this.CurrentQuestion?.questionNumber ?? 0,
         answer: this.SelectedChoice,
       }); // Call backend to move data
       alert("Final submission successful! Answers saved to database.");
       this.SetPopupConfirmationclass("popup__confirmation-show");
+      localStorage.removeItem("ujanSessionId");
     } catch (error) {
       console.log(error);
       alert("Failed to submit answers. ");
+    } finally {
+      this.isLoadingTryout = false;
     }
   };
 
   SetAnswer = async () => {
-    console.log("this.SelectedChoice : " + this.SelectedChoice);
-    console.log("this.CurrentQuestionId : " + this.CurrentQuestionId);
+    // console.log("this.SelectedChoice : " + this.SelectedChoice);
+    // console.log("this.CurrentQuestionId : " + this.CurrentQuestionId);
 
     this.listAnswer = [
       ...this.listAnswer,
@@ -243,48 +268,52 @@ export default class TryoutStore {
   CheckIsTryoutStarted = async () => {
     const sessionID_ = localStorage.getItem("ujanSessionId");
 
-    console.log("check " + localStorage.getItem("ujanSessionId"));
-
-    if (sessionID_ === undefined) {
+    if (sessionID_ === undefined || sessionID_ === null) {
       this.SetIsTryoutStarted(false);
       return;
     }
 
-    console.log("sessionID_ : " + sessionID_);
-
     this.SetSessionId(sessionID_ ?? "");
+    try {
+      this.isLoadingTryout = true;
+      const statusRes = await agent.Tryout.getSessionStatus(sessionID_ ?? "");
+      const session = statusRes.data.session;
 
-    const statusRes = await agent.Tryout.getSessionStatus(sessionID_ ?? "");
-    const session = statusRes.data.session;
+      this.setTimeLeft(session.remainingTime);
+      this.startTimer(); // ✅ resume countdown
+    } catch (err) {
+      console.log("Error checking the tryout status " + err);
+    } finally {
+      this.isLoadingTryout = false;
+    }
 
-    this.setTimeLeft(session.remainingTime);
-    this.startTimer(); // ✅ resume countdown
+    try {
+      this.isLoadingTryout = true;
+      const answersRes = await agent.Tryout.getSubmittedAnswer(
+        sessionID_ ?? ""
+      );
 
-    const answersRes = await agent.Tryout.getSubmittedAnswer(sessionID_ ?? "");
+      if (answersRes.data && answersRes.data.length > 0) {
+        const highest: ListAnswer = answersRes.data.reduce(
+          (max: AnswerLog, current: AnswerLog) => {
+            return current.questionId > max.questionId ? current : max;
+          }
+        ) as ListAnswer;
 
-    // const highest = answersRes.data.reduce(
-    //   (max: AnswerLog, current: AnswerLog) => {
-    //     let quest_: ListAnswer;
-    //     quest_ = current.questionId > max.questionId ? current : max;
-    //     return quest_;
-    //   }
-    // );
-
-    const highest: ListAnswer = answersRes.data.reduce(
-      (max: AnswerLog, current: AnswerLog) => {
-        return current.questionId > max.questionId ? current : max;
+        this.listAnswer = answersRes.data;
+        this.SetCurrentQuestionId(highest.questionId);
       }
-    ) as ListAnswer;
-
-    this.listAnswer = answersRes.data;
-    this.SetCurrentQuestionId(highest.questionId);
-
-    this.SetIsTryoutStarted(true);
+      this.SetIsTryoutStarted(true);
+    } catch (err) {
+      console.log("Error checking the tryout status " + err);
+    } finally {
+      this.isLoadingTryout = false;
+    }
   };
 
   loadUserPackage = async () => {
     try {
-      const result = await agent.Package.getPurchasedPackage();
+      const result = await agent.UserPackage.getPurchasedPackage();
       const data = Array.isArray(result?.data) ? result.data : [];
       runInAction(() => {
         this.listUserPackage = data;
@@ -340,13 +369,26 @@ export default class TryoutStore {
       OptionD: this.sanitize(this.form.OptionD || ""),
       OptionE: this.sanitize(this.form.OptionE || ""),
       Note: "",
+      Answer_Text: "",
+      Package_Name: "",
+      DateCreate: "",
       Image: "",
       Category: "",
       Explanation: this.sanitize(this.form.Explanation || ""),
     };
 
+    const formData = new FormData();
+
+    for (const [key, value] of Object.entries(clean)) {
+      formData.append(key, value == null ? "" : String(value));
+    }
+
+    if (this.form.Image) {
+      formData.append("Image", this.form.Image);
+    }
+
     try {
-      await agent.Package.submitQuestion(clean);
+      await agent.Package.submitQuestion(formData);
     } catch (err) {
       throw err;
     }

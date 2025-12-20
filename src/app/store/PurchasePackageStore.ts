@@ -29,7 +29,7 @@ export default class PurchasePackageStore {
     });
 
     try {
-      const response: ListUserPackage[] = await agent.Package.getPackage();
+      const response: ListUserPackage[] = await agent.UserPackage.getPackage();
 
       const cleanId = packageId.replace(/"/g, "").trim();
 
@@ -49,7 +49,10 @@ export default class PurchasePackageStore {
 
   purchasePackage = async (packageId: string) => {
     if (!this.packageDetail) return;
-    await agent.Package.purcahsePackage({ package_id: packageId }, packageId);
+    await agent.UserPackage.purcahsePackage(
+      { package_id: packageId },
+      packageId
+    );
     runInAction(() => {
       this.purchaseConfirmed = true;
     });

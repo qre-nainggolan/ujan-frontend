@@ -1,4 +1,6 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+client-app/node_modules
+/client-app/node_modules
 
 # dependencies
 /node_modules
@@ -10,6 +12,7 @@
 
 # production
 /build
+/tiles
 
 # misc
 .DS_Store

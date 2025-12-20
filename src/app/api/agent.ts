@@ -1,26 +1,37 @@
 import axios, { AxiosResponse } from "axios";
-import { LoginInterface, User } from "../model/LoginInterface";
+import {
+  LoginInterface,
+  User,
+  PurchaseInterface,
+} from "../model/LoginInterface";
 import { store } from "../store/store";
 import { UserProfile } from "../model/UserProfile";
 import { PostResponse } from "../model/PostResponse";
 import { RegistrationDataSubmissionValue } from "../model/RegistrationDataSubmission";
 import { ListUserScore } from "../model/ListUserScore";
 import { ListUserPackage } from "../model/ListPackage";
+import { ListProgressSummaryResponse } from "../model/ListProgressSummary";
+import { PaymentStatusResponse } from "../store/PaymentStore";
 
 interface SubmitAnswerRequest {
   sessionId: string;
   questionId: number;
+  questionNumber: number;
   answer: string;
 }
 
 interface TryoutResponse {
   sessionId: string;
   timeLeft: number;
+  isLast: boolean;
+  totalQuestion: number;
   done: boolean;
   question: {
     id: number;
+    questionNumber: number;
     text: string;
     done: boolean;
+    image: string;
     choices: string[];
   };
 }
@@ -38,6 +49,7 @@ interface SessionStatusResponse {
 
 type AnswerLog = {
   questionId: number;
+  questionNumber: number;
   answer: string;
 };
 
@@ -45,11 +57,31 @@ type PackageDetail = {
   package_id: string;
 };
 
+interface CreatePaymentResponse {
+  paymentUrl: string;
+  merchantOrderId: string;
+  reference: string;
+  statusCode: string;
+  statusMessage: string;
+}
+
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
 // axios.defaults.baseURL = import.meta.env.VITE_API_URL;
+// axios.defaults.baseURL = "https://api.lulusku.com/api";
 axios.defaults.baseURL =
-  process.env.REACT_APP_API_URL || "http://localhost:9009/api";
+  import.meta.env.VITE_API_URL || "https://api.lulusku.com/api";
+
+axios.interceptors.response.use(
+  (res) => res,
+  (err) => {
+    const status = err.response?.status;
+    if (status === 403) {
+      window.location.href = "/MainPage";
+    }
+    return Promise.reject(err);
+  }
+);
 
 axios.interceptors.request.use((config) => {
   const token = store.CommonStore.token;
@@ -70,14 +102,25 @@ function errorHandler(error: any) {
   return Promise.reject(error);
 }
 
+const Purchase = {
+  create: (package_: PurchaseInterface) =>
+    requests.post<CreatePaymentResponse>(`/payments/duitku/create`, package_),
+  checkStatus: (orderId: string) =>
+    requests.get<PaymentStatusResponse>(
+      `/payments/duitku/status?orderId=${orderId}`
+    ),
+};
+
 const Account = {
   login: (user: LoginInterface) => requests.post<User>(`/account/login`, user),
-  logout: (sessionId: string): Promise<AxiosResponse<any>> =>
-    axios.get(`/account/logout?sessionID=${sessionId}`),
+  logout: (): Promise<AxiosResponse<any>> => axios.post(`/account/logout`),
   getUserProfile: (): Promise<AxiosResponse<UserProfile>> =>
     axios.get(`/account/get-user-profile`),
-  submitRegistration: (params: RegistrationDataSubmissionValue) =>
+  submitRegistration_: (params: RegistrationDataSubmissionValue) =>
     requests.post<PostResponse>(`/account/submitRegistration`, params),
+  // inside Account object in agent.ts
+  submitRegistration: (body: RegistrationDataSubmissionValue) =>
+    requests.post<any>("/account/register", body),
 };
 
 const Lora = {
@@ -113,8 +156,11 @@ const Lora = {
 };
 
 const Tryout = {
-  startTryout: (): Promise<AxiosResponse<TryoutResponse>> =>
-    axios.get(`/ujantest/start-tryout`),
+  startTryout: (
+    packageId: string,
+    sub: string
+  ): Promise<AxiosResponse<TryoutResponse>> =>
+    axios.get(`/ujantest/start-tryout?packageId=${packageId}&sub=${sub}`),
   continueTryout: (
     sessionId: string,
     lastQuestionId: number
@@ -139,27 +185,56 @@ const Tryout = {
 };
 
 const UserPackage = {
-  startTest: (): Promise<AxiosResponse<TryoutResponse>> =>
-    axios.get(`/userpackage/start-test`),
+  startTest: (
+    packageId: string,
+    sub: string
+  ): Promise<AxiosResponse<TryoutResponse>> =>
+    axios.get(`/userpackage/start-test?packageId=${packageId}&sub=${sub}`),
   checkSessionExists: (sessionId: string) =>
     axios.get("/userpackage/check-session-exists", { params: { sessionId } }),
   continueTest: (
     sessionId: string,
     lastQuestionId: number,
-    package_id: string
+    package_id: string,
+    sub: string
   ): Promise<AxiosResponse<TryoutResponse>> =>
     axios.get(
-      `/userpackage/continue-test?sessionId=${sessionId}&lastQuestionId=${lastQuestionId}&package_id=${package_id}`
+      `/userpackage/continue-test?sessionId=${sessionId}&lastQuestionId=${lastQuestionId}&package_id=${package_id}&sub=${sub}`
+    ),
+  getSubtest(packageId: string) {
+    return axios.get(`/userpackage/get-subtest?packageId=${packageId}`);
+  },
+  purcahsePackage: (params: PackageDetail, package_id: string) =>
+    requests.post<PostResponse>(
+      `/userpackage/purchase-package?package_id=${package_id}`,
+      params
     ),
   checkQuestion: (
     sessionId: string,
-    lastQuestionId: number
+    lastQuestionId: number,
+    questionNumber: number
   ): Promise<AxiosResponse<TryoutResponse>> =>
     axios.get(
-      `/userpackage/check-question?sessionId=${sessionId}&lastQuestionId=${lastQuestionId}`
+      `/userpackage/check-question?sessionId=${sessionId}&lastQuestionId=${lastQuestionId}&questionNumber=${questionNumber}`
     ),
-  getDetailPackage: (packageID: string): Promise<AxiosResponse<any>> =>
-    axios.get(`/userpackage/get-package-information?Package_ID=${packageID}`),
+  goIntoQuestion: (
+    sessionId: string,
+    lastQuestionId: number,
+    package_id: string,
+    sub: string
+  ): Promise<AxiosResponse<TryoutResponse>> =>
+    axios.get(
+      `/userpackage/go-into-question?sessionId=${sessionId}&lastQuestionId=${lastQuestionId}&package_id=${package_id}&sub=${sub}`
+    ),
+  getPackageInformation: (
+    packageID: string,
+    sub: string
+  ): Promise<AxiosResponse<any>> =>
+    axios.get(
+      `/userpackage/get-package-information?Package_ID=${packageID}&sub=${sub}`
+    ),
+  getPurchasedPackage: (): Promise<AxiosResponse<any>> =>
+    axios.get(`/userpackage/get-purchased-package`),
   getTestSession: (
     sessionId: string
   ): Promise<AxiosResponse<SessionStatusResponse>> =>
@@ -170,6 +245,14 @@ const UserPackage = {
     axios.post(`/userpackage/answer-test`, params),
   submitTest: (params: SubmitAnswerRequest): Promise<AxiosResponse<any>> =>
     axios.post(`/userpackage/submit-test`, params),
+  getPackage: () =>
+    axios.get<ListUserPackage[]>(`/userpackage/get-package`).then(responseBody),
+  getPackageTest: (): Promise<any[]> => {
+    return axios.get(`/package/get-package`).then((res) => {
+      console.log("📦 Raw response from /userpackage/get-package:", res);
+      return res.data;
+    });
+  },
 };
 
 const Score = {
@@ -184,29 +267,23 @@ const Score = {
       )
       .then(responseBody),
   getScoreDetails: () => axios.get("/ujanscore/get-score-details"),
+  getProgressSummary: (
+    keyword_: string,
+    currentPage: number,
+    pageSize: number
+  ): Promise<AxiosResponse<ListProgressSummaryResponse>> =>
+    axios
+      .get(
+        `/ujanscore/get-progress-summary?keyword=${keyword_}&page=${currentPage}&limit=${pageSize}`
+      )
+      .then(responseBody),
 };
 
 const Package = {
-  getPackage: () =>
-    axios.get<ListUserPackage[]>(`/package/get-package`).then(responseBody),
-  getPackageTest: (): Promise<any[]> => {
-    console.log("📦 getPackageTest() called"); // new log
-    return axios.get(`/package/get-package`).then((res) => {
-      console.log("📦 Raw response from /package/get-package:", res);
-      return res.data;
-    });
-  },
   getListMainPackage: (): Promise<AxiosResponse<any>> =>
     axios.get(`/package/get-list-main-package`),
   getListTypePackage: (package_id: string): Promise<AxiosResponse<any>> =>
     axios.get(`/package/get-list-type-package?package_id=${package_id}`),
-  getPurchasedPackage: (): Promise<AxiosResponse<any>> =>
-    axios.get(`/package/get-purchased-package`),
-  purcahsePackage: (params: PackageDetail, package_id: string) =>
-    requests.post<PostResponse>(
-      `/package/purchase-package?package_id=${package_id}`,
-      params
-    ),
   getPaginatedQuestionList: (
     package_id: string,
     category: string,
@@ -217,7 +294,7 @@ const Package = {
   ) =>
     axios
       .get<any>(
-        `/package/get-paginated-question-list?package_id=${package_id}&category=${category}&start=${startDate}&end=${endDate}&page=${currentPage}&limit=${pageSize}`
+        `/package/get-paginated-question-list?package_id=${package_id}&sub=${category}&start=${startDate}&end=${endDate}&page=${currentPage}&limit=${pageSize}`
       )
       .then(responseBody),
   getPaginatedPackageTypeList: (
@@ -233,8 +310,11 @@ const Package = {
         `/package/get-paginated-package-type-list?package_id=${package_id}&category=${category}&start=${startDate}&end=${endDate}&page=${currentPage}&limit=${pageSize}`
       )
       .then(responseBody),
-  submitQuestion: (params: any): Promise<AxiosResponse<any>> =>
-    axios.post(`/package/submit-question`, params),
+  submitQuestion: (formData: FormData) =>
+    axios.post(`/package/submit-question`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    }),
+
   submitPackageType: (params: any): Promise<AxiosResponse<any>> =>
     axios.post(`/package/submit-package-type`, params),
 };
@@ -246,6 +326,7 @@ const agent = {
   Score,
   Package,
   UserPackage,
+  Purchase,
 };
 
 export default agent;

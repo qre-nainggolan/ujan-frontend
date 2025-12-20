@@ -170,7 +170,7 @@ body {
   font-size: 3.5rem;
   text-transform: uppercase;
   font-weight: 700;
-  display: inline-block;
+
   background-image: linear-gradient(to right, #7ed56f, #28b485);
   -webkit-background-clip: text;
   color: transparent;
@@ -331,16 +331,20 @@ body {
   color: #fff;
   font-weight: bold;
 }
+
 .btn--white::after {
   background-color: #efe8e8;
 }
+
 .btn--green {
   background-color: #55c57a;
   color: #fff;
 }
+
 .btn--green::after {
   background-color: #55c57a;
 }
+
 .btn::after {
   content: "";
   display: inline-block;
@@ -353,6 +357,7 @@ body {
   z-index: -1;
   transition: all 0.4s;
 }
+
 .btn--animated {
   animation: moveInBottom 0.5s ease-out 0.75s;
   animation-fill-mode: backwards;
@@ -368,12 +373,14 @@ body {
   padding: 3px;
   transition: all 0.2s;
 }
+
 .btn-text:hover {
   background-color: #55c57a;
   color: #fff;
   box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
   transform: translateY(-2px);
 }
+
 .btn-text:active {
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
   transform: translateY(-2px);
@@ -382,6 +389,7 @@ body {
 .composition {
   position: relative;
 }
+
 .composition__photo {
   width: 55%;
   box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.4);
@@ -391,6 +399,7 @@ body {
   transition: all 0.2s;
   outline-offset: 2rem;
 }
+
 @media only screen and (max-width: 56.25em) {
   .composition__photo {
     float: left;
@@ -399,10 +408,12 @@ body {
     box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, 0.2);
   }
 }
+
 .composition__photo--p1 {
   left: 0;
   top: -2rem;
 }
+
 @media only screen and (max-width: 56.25em) {
   .composition__photo--p1 {
     top: 0;
@@ -413,6 +424,7 @@ body {
   right: 0;
   top: 2rem;
 }
+
 @media only screen and (max-width: 56.25em) {
   .composition__photo--p2 {
     top: -1rem;
@@ -420,10 +432,12 @@ body {
     z-index: 100;
   }
 }
+
 .composition__photo--p3 {
   left: 20%;
   top: 10rem;
 }
+
 @media only screen and (max-width: 56.25em) {
   .composition__photo--p3 {
     left: 0;
@@ -431,12 +445,14 @@ body {
     transform: scale(1.1);
   }
 }
+
 .composition__photo:hover {
   outline: 1.5rem solid #55c57a;
   transform: scale(1.05) scaleY(-0.5rem);
   box-shadow: 0 2.5rem 4rem rgba(0, 0, 0, 0.5);
   z-index: 20;
 }
+
 .composition:hover .composition__photo:not(:hover) {
   transform: scale(0.95);
 }
@@ -450,11 +466,13 @@ body {
   box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.15);
   transition: transform 0.3s;
 }
+
 @media only screen and (max-width: 56.25em) {
   .feature-box {
     padding: 2rem;
   }
 }
+
 .feature-box__icon {
   font-size: 6rem;
   margin-bottom: 0.5rem;
@@ -463,11 +481,13 @@ body {
   -webkit-background-clip: text;
   color: transparent;
 }
+
 @media only screen and (max-width: 56.25em) {
   .feature-box__icon {
     margin-bottom: 0;
   }
 }
+
 .feature-box:hover {
   transform: translateY(-1.5rem) scale(1.03);
 }
@@ -478,6 +498,7 @@ body {
   position: relative;
   height: 52rem;
 }
+
 .card__side {
   height: 52rem;
   transition: all 0.8s ease;
@@ -491,23 +512,29 @@ body {
   overflow: hidden;
   box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.0015);
 }
+
 .card__side--front {
   background-color: #fff;
   box-shadow: 0 -4px 25px rgba(118, 192, 252, 0.5);
 }
+
 .card__side--back {
   background-color: green;
   transform: rotateY(180deg);
 }
+
 .card__side--back-1 {
   background-image: linear-gradient(to right bottom, #ffb900, #ff7730);
 }
+
 .card:hover .card__side--front {
   transform: rotateY(-180deg);
 }
+
 .card:hover .card__side--back {
   transform: rotateY(0);
 }
+
 .card__picture {
   background-size: cover;
   height: 23rem;
@@ -517,17 +544,21 @@ body {
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
 }
+
 .card__picture--1 {
   background-image: linear-gradient(to right bottom, #ffb900, #ff7730),
     url(../img/Free_TKD_Banner.webp);
 }
+
 .card__picture--2 {
   background-image: linear-gradient(to right bottom, #2998ff, #5643fa),
     url(../img/Free_TWK_Banner.webp);
 }
+
 .card__picture--3 {
   background-image: url(../img/Free_TIU_Banner.webp);
 }
+
 .card__heading {
   font-size: 2.8rem;
   font-weight: 300;
@@ -539,11 +570,13 @@ body {
   text-align: right;
   width: 72%;
 }
+
 .card__heading-span {
   padding: 1rem 1.5rem;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
 }
+
 .card__heading-span--1,
 .card__heading-span--2,
 .card__heading-span--3,
@@ -554,22 +587,27 @@ body {
     rgba(255, 119, 48, 0.85)
   );
 }
+
 .card__details {
   padding: 2rem;
 }
+
 .card__details ul {
   list-style: none;
   width: 80%;
   margin: 0 auto;
 }
+
 .card__details ul li {
   text-align: center;
   font-size: 1.5rem;
   padding: 1rem;
 }
+
 .card__details ul li:not(:last-child) {
   border-bottom: 1px solid #eee;
 }
+
 .card__cta {
   position: absolute;
   top: 50%;
@@ -591,6 +629,7 @@ body {
   font-size: 6rem;
   font-weight: 100;
 }
+
 @media only screen and (max-width: 56.25em), only screen and (hover: none) {
   .card {
     height: auto;
@@ -598,11 +637,13 @@ body {
     background-color: #fff;
     box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.0015);
   }
+
   .card__side {
     height: auto;
     position: relative;
     box-shadow: none;
   }
+
   .card__side--back {
     transform: rotateY(0);
     clip-path: polygon(0 15%, 100% 0, 100% 100%, 0 100%);
@@ -629,16 +670,16 @@ body {
   }
 }
 
-.form__group:not(:last-child) {
-  margin-bottom: 2rem;
+.form__group {
+  margin-bottom: 0.75rem;
 }
 
 .form__input,
 .form__input__account {
   color: inherit;
   font-family: inherit;
-  padding: 1rem 0.5rem;
-  border-radius: 2px;
+  padding: 0.75rem 0.5rem;
+  border-radius: 0.1rem;
   background-color: rgba(255, 255, 255, 0.5);
   border: none;
   border-bottom: 3px solid transparent;
@@ -807,6 +848,7 @@ body {
   display: block;
   width: 100%;
 }
+
 .popup__text {
   font-size: 1.4rem;
   margin-bottom: 4rem;
@@ -823,8 +865,9 @@ body {
 }
 
 .popup-account {
-  padding-top: 1rem;
+  padding-top: 0rem;
   height: 100vh;
+  overflow-y: auto !important; /* allow scrolling */
   width: 100%;
   position: fixed;
   line-height: 1.2;
@@ -865,24 +908,31 @@ body {
 .popup-account__close:hover {
   color: #55c57a;
 }
+
 .popup-account__content {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
+  transform: translate(-50%, -50%) scale(0.99);
+  width: 90%;
+  max-width: 90%;
+
+  max-height: 100vh; /* limits modal height */
+  overflow-y: auto; /* allows scrolling inside */
+  overflow-x: hidden;
+
+  padding: 2rem;
   background-color: #fff;
   box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.2);
-  border-radius: 3px;
-  display: table;
-  overflow: hidden;
-  transform: translate(-50%, -50%) scale(0.78);
-  transition: all 0.5s 0.2s;
+  border-radius: 6px;
+
+  transition: all 0.4s ease;
 }
+
 .popup-account__full {
   width: 100%;
   display: table-cell;
-  padding: 1.25rem 1.25rem;
+  padding: 0.25rem 0.25rem;
 }
 .popup-account__img {
   display: block;
@@ -1340,13 +1390,9 @@ body {
 }
 .registration__form {
   width: 100%;
-  padding: 6rem;
+  padding: 0.75rem;
 }
-@media only screen and (max-width: 75em) {
-  .registration__form {
-    width: 65%;
-  }
-}
+
 @media only screen and (max-width: 56.25em) {
   .registration__form {
     width: 100%;
@@ -1354,3 +1400,348 @@ body {
 }
 
 /*# sourceMappingURL=style.css.map */
+
+/* ===== React-controlled registration modal ===== */
+
+/* When React adds .popup-account--open, show the overlay */
+.popup-account.popup-account--open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Make sure the inner content is fully visible */
+.popup-account.popup-account--open .popup-account__content {
+  opacity: 1;
+}
+
+.popup-account__close:link,
+.popup-account__close:visited {
+  color: #777;
+  position: absolute;
+  top: 2.5rem;
+  right: 2.5rem;
+  font-size: 3rem;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.2s;
+  line-height: 1;
+}
+.popup-account__close:hover {
+  color: #55c57a;
+}
+
+/* Button-style close (for <button class="popup-account__close">×</button>) */
+.popup-account__close {
+  position: absolute;
+  top: 2.5rem;
+  right: 2.5rem;
+  font-size: 3rem;
+  line-height: 1;
+  background: transparent;
+  border: none;
+  color: #777;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.2s;
+}
+
+.popup-account__close:hover,
+.popup-account__close:focus {
+  color: #55c57a;
+}
+
+.toast {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  padding: 1.5rem 2rem;
+  border-radius: 1rem;
+  font-size: 1.6rem;
+  color: white;
+  z-index: 99999;
+  min-width: 28rem;
+  animation: fadeSlide 0.4s ease-out;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
+}
+
+.toast--success {
+  background: #55c57a;
+}
+
+.toast--error {
+  background: #ff4e4e;
+}
+
+@keyframes fadeSlide {
+  from {
+    transform: translateY(-2rem);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ***************************************************** */
+.register-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-content {
+  background: white;
+  display: flex;
+  width: 110rem;
+  min-height: 65rem;
+
+  border-radius: 2.2rem;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.2);
+  margin: 0 auto;
+}
+
+.close-btn {
+  position: absolute;
+  top: 0.2rem;
+  right: 0.2rem;
+  background: white;
+  border: none;
+  font-size: 2.8rem;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #333;
+  box-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.15);
+}
+
+.modal-left {
+  flex: 1;
+  padding: 1rem 3.5rem;
+}
+
+.modal-right {
+  width: 40%;
+  background: linear-gradient(135deg, #e9f7ef, #fdfdfd);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-right img {
+  width: 100%;
+  object-fit: cover;
+  opacity: 0.8;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #12893c;
+}
+
+.subtitle {
+  color: #777;
+  margin-bottom: 40px;
+}
+
+.register-form .form-group {
+  position: relative;
+  margin-bottom: 28px;
+}
+
+.register-form input,
+.register-form select {
+  width: 100%;
+  padding: 14px 12px;
+  border: 1.8px solid #cfdad1;
+  border-radius: 10px;
+  font-size: 15px;
+  background: rgba(255, 255, 255, 0.85);
+  transition: all 0.2s ease;
+}
+
+.register-form input:focus,
+.register-form select:focus {
+  border-color: #12893c;
+  box-shadow: 0 0 0 3px rgba(18, 137, 60, 0.2);
+}
+
+.register-form label {
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: #888;
+  pointer-events: none;
+  transition: 0.2s ease;
+}
+
+.register-form input:focus + label,
+.register-form input:not(:placeholder-shown) + label,
+.register-form select:focus + .label-select {
+  top: -6px;
+  font-size: 12px;
+  background: white;
+  padding: 0 6px;
+  color: #12893c;
+}
+
+.form-row {
+  display: flex;
+  gap: 18px;
+}
+
+.submit-btn {
+  margin-top: 12px;
+  width: 100%;
+  padding: 16px;
+  background: #12893c;
+  border: none;
+  color: white;
+  font-size: 17px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.submit-btn:hover {
+  background: #0f7a34;
+  transform: translateY(-2px);
+}
+
+/* Base modal */
+.modal-content {
+  width: 110rem;
+  max-width: 95vw; /* prevents overflow */
+  min-height: 65rem;
+  border-radius: 2.2rem;
+  display: flex;
+  flex-direction: row;
+}
+
+/* For screens smaller than 1024px */
+@media (max-width: 1024px) {
+  .modal-content {
+    width: 90vw;
+    flex-direction: column; /* stack left + right */
+    min-height: auto;
+  }
+
+  .modal-left {
+    width: 100%;
+    padding: 3rem 3rem;
+  }
+
+  .modal-right {
+    width: 100%;
+    height: 18rem; /* make artwork a banner */
+    padding: 0;
+  }
+
+  .modal-right img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .close-btn {
+    top: 1rem;
+    right: 1rem;
+  }
+}
+
+/* For mobile screens */
+@media (max-width: 600px) {
+  .modal-content {
+    width: 95vw;
+    border-radius: 1.4rem;
+  }
+
+  .modal-left {
+    padding: 2rem 1.6rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
+
+  .register-form input,
+  .register-form select {
+    padding: 12px;
+    font-size: 1.4rem;
+  }
+
+  .submit-btn {
+    font-size: 1.5rem;
+    padding: 1.4rem;
+  }
+
+  .modal-right {
+    height: 14rem;
+  }
+}
+@media (max-height: 800px) {
+  .register-modal {
+    align-items: flex-start;
+    padding-top: 1rem; /* give breathing space */
+    padding-bottom: 1rem;
+    overflow-y: auto; /* allow scroll if modal taller than viewport */
+  }
+}
+
+.modal-right {
+  position: relative;
+  overflow: hidden;
+}
+
+.modal-right::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom right,
+    rgba(255, 255, 255, 0.6),
+    rgba(255, 255, 255, 0)
+  );
+  pointer-events: none;
+}
+
+.modal-right img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 🔥 makes it full-screen & beautiful */
+  object-position: right;
+  display: block;
+}
+
+.navigation__nav {
+  pointer-events: none;
+}
+
+.navigation__checkbox:checked ~ .navigation__nav {
+  pointer-events: auto;
+}
+
+.navigation__background {
+  pointer-events: none;
+}
+
+.navigation__checkbox:checked ~ .navigation__background {
+  pointer-events: auto;
+}

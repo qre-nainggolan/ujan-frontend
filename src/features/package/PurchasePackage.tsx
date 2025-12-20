@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 
 import NavLane from "../../NavLane";
@@ -11,10 +11,10 @@ import "../../css/form.css";
 
 import { useStore } from "../../app/store/store";
 import Footer from "../../Footer";
+import PayWithDuitkuButton from "../component/PayWithDuitkuButton";
 
 export default observer(function PackageBank() {
   const [params] = useSearchParams();
-  const navigate = useNavigate();
   const { PurchasePackageStore } = useStore();
 
   const {
@@ -24,7 +24,7 @@ export default observer(function PackageBank() {
     purchaseConfirmed,
     setField,
     loadPackageDetail,
-    purchasePackage,
+    // purchasePackage,
   } = PurchasePackageStore;
 
   const packageId = params.get("package");
@@ -34,11 +34,11 @@ export default observer(function PackageBank() {
     else loadPackageDetail(packageId);
   }, [packageId]);
 
-  const handlePurchase = async () => {
-    if (!packageId) return;
-    await purchasePackage(packageId);
-    setTimeout(() => navigate("/Package"), 3000);
-  };
+  // const handlePurchase = async () => {
+  //   if (!packageId) return;
+  //   await purchasePackage(packageId);
+  //   setTimeout(() => navigate("/Package"), 3000);
+  // };
 
   if (purchaseLoading) {
     return <div className="purchase-loading">Loading...</div>;
@@ -54,13 +54,10 @@ export default observer(function PackageBank() {
       <div className="layout__body">
         <NavLane />
         <main className="layout__main">
-          <h1>Packets</h1>
-
           <div className="purchase-wrapper">
             <div className="purchase-card">
               <h1 className="purchase-title">Konfirmasi Pembelian</h1>
               <p className="purchase-title">Paket: {packageDetail!.name}</p>
-
               <div className="purchase-detail-box">
                 <p>
                   <strong>Deskripsi:</strong> {packageDetail!.description}
@@ -69,11 +66,11 @@ export default observer(function PackageBank() {
                   <strong>Harga:</strong>
                   <br />
                   <span className="price">
-                    Rp {packageDetail!.final_price.toLocaleString()}
+                    Rp{" "}
+                    {Number(packageDetail.final_price).toLocaleString("id-ID")}
                   </span>
                 </p>
               </div>
-
               <div className="purchase-form">
                 <label htmlFor="name">
                   Masukan Kupon / Kode Promo (jika ada)
@@ -85,8 +82,7 @@ export default observer(function PackageBank() {
                   onChange={(e) => setField("purchaseName", e.target.value)}
                   disabled={purchaseConfirmed}
                 />
-
-                <button
+                {/* <button
                   className={`purchase-button ${
                     purchaseConfirmed ? "confirmed" : ""
                   }`}
@@ -96,8 +92,12 @@ export default observer(function PackageBank() {
                   {purchaseConfirmed
                     ? "Pembayaran Berhasil ✓"
                     : "Bayar Sekarang"}
-                </button>
-
+                </button> */}
+                <PayWithDuitkuButton
+                  packageId_={packageDetail.package_id}
+                  packageName_={packageDetail.name}
+                  priceIdr={packageDetail.final_price}
+                />
                 {purchaseConfirmed && (
                   <p className="purchase-success">
                     Terima kasih! Pembelian berhasil. Mengalihkan ke halaman

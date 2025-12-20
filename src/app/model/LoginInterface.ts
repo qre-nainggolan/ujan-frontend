@@ -11,16 +11,7 @@ export interface LoginInterface {
   password: string;
 }
 
-export interface LoraInterface {
-  m: string;
-  r: string;
-  a: string;
-  sp: string;
-  mt: string;
-  mnt: string;
-  hmt: string;
-  hmnt: string;
-  mn: string;
-  ac: string;
-  hc: string;
+export interface PurchaseInterface {
+  packageId: string;
+  packageName: string;
 }

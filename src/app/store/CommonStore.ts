@@ -10,6 +10,8 @@ export default class CommonStore {
   hamburgerState = true;
   userProfile: UserProfile | null = null;
   loadingProfile = false;
+  navLaneWidth: number | 0 = 0;
+  collapsedWidth: number | 0 = 60;
 
   constructor() {
     makeAutoObservable(this);
@@ -38,6 +40,16 @@ export default class CommonStore {
     this.token = token;
   };
 
+  setNavLaneWidth(width: number) {
+    if (!width) return;
+
+    if (width === undefined) return;
+
+    // if (!this.navLaneWidth) return;
+
+    // this.navLaneWidth = width;
+  }
+
   setAppLoaded = () => {
     this.appLoaded = true;
   };
@@ -57,7 +69,7 @@ export default class CommonStore {
   };
 
   logout = async () => {
-    await agent.Account.logout(localStorage.getItem("ujanSessionId")!);
+    await agent.Account.logout();
     runInAction(() => {
       this.userProfile = null;
     });

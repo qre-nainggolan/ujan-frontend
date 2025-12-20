@@ -20,6 +20,7 @@ export default class UserStore {
   UserProfile: UserProfile | null = null;
 
   detail: UserProfile = {
+    userType: "",
     nama_User: "",
     userID: "",
     registering: "",

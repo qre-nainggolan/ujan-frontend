@@ -6,6 +6,7 @@ export interface UserProfile {
   fingerprint: string;
   expired_Password: string;
   approval_Notes: string;
+  userType: string;
   lastChange: string;
   password: string;
   retypePassword: string;

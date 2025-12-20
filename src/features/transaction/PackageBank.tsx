@@ -13,17 +13,57 @@ export default observer(function PackageBank() {
   );
 
   const { QuestionStore, TestStore } = useStore();
-  const { startTest } = TestStore;
+  const {
+    startTest,
+    isStarted,
+    packageId,
+    isLoadingSubtest,
+    subtestList,
+    loadSubtest,
+    selectedSubtest,
+    sessionId,
+    setSelectedSubtest,
+    setPackageId,
+    initTest,
+  } = TestStore;
 
   const { listUserPackage, loadUserPackage } = QuestionStore;
   const popupRef = useRef<HTMLDivElement>(null);
-  const [choosedId, setChoosedId] = useState("");
 
   const navigate = useNavigate();
 
+  // Search filter
+  const [filterText, setFilterText] = useState("");
+
+  // Animate popup
+  const [animClass, setAnimClass] = useState("popup__content--hidden");
+
+  // Highlight match
+  function highlight(text: string, keyword: string) {
+    if (!keyword) return text;
+
+    const regex = new RegExp(`(${keyword})`, "gi");
+    return text.replace(regex, `<mark class="hi">$1</mark>`);
+  }
+
+  // Group subtests by category
+  const groupedSubtests = subtestList.reduce((acc, item) => {
+    const category = item.category || "Lainnya";
+    if (!acc[category]) acc[category] = [];
+    acc[category].push(item);
+    return acc;
+  }, {});
+
   useEffect(() => {
     loadUserPackage();
+    initTest();
   }, []);
+
+  useEffect(() => {
+    if (isStarted && sessionId) {
+      navigate(`/PackageTest?for=${packageId}&sub=${selectedSubtest}`);
+    }
+  }, [isStarted, sessionId]);
 
   return (
     <>
@@ -32,7 +72,6 @@ export default observer(function PackageBank() {
         <div className="layout__body">
           <NavLane />
           <main className="layout__main">
-            <h1>Paket Belajar Ku..</h1>
             <div className="u-center-text u-margin-bottom-medium">
               <h2 className="heading-secondary">
                 Ujian & Latihan Dimana Saja Dengan Gratis
@@ -93,19 +132,21 @@ export default observer(function PackageBank() {
                             href="#"
                             onClick={() => {
                               if (pkg.is_purchased) {
+                                loadSubtest(pkg.package_id);
                                 setPopupConfirmationclass(
                                   "popup__confirmation-show"
                                 );
-                                setChoosedId(pkg.package_id);
+                                setPackageId(pkg.package_id);
                               } else {
                                 navigate(
                                   `/PurchasePackage?package=${pkg.package_id}`
                                 );
                               }
                             }}
+                            style={{ fontWeight: 200 }}
                             className="btn btn--white"
                           >
-                            Mulai Latihan →
+                            Mulai
                           </a>
                         </div>
                       </div>
@@ -116,33 +157,112 @@ export default observer(function PackageBank() {
             )}
           </main>
         </div>
-        {/* Footer */}
         <footer className="layout__footer">&copy; ANE</footer>
         <div className={popupConfirmationClass}>
           <div
             className="popup__confirmation__overlay"
-            onClick={() => setPopupConfirmationclass("popup__confirmation")}
+            onClick={() => {
+              setAnimClass("popup__content--hidden");
+              setTimeout(
+                () => setPopupConfirmationclass("popup__confirmation"),
+                200
+              );
+              setSelectedSubtest("");
+            }}
           ></div>
-          <div className="popup__confirmation__content fancy" ref={popupRef}>
-            <h3 className="popup__confirmation__title">Submit Confirmation</h3>
-            <p className="popup__confirmation__text">
-              Yakin untuk mulai simulasi?
-            </p>
+          <div
+            className={`popup__confirmation__content fancy ${animClass}`}
+            ref={popupRef}
+          >
+            <h3 className="popup__confirmation__title">Pilih Kategori Test</h3>
+            <div className="popup__filter-box">
+              <input
+                type="text"
+                placeholder="Cari subtest..."
+                value={filterText}
+                onChange={(e) => setFilterText(e.target.value)}
+                className="popup__filter-input"
+              />
+            </div>
+            {isLoadingSubtest ? (
+              <p>Loading subtest...</p>
+            ) : (
+              <div className="subtest-list">
+                {Object.keys(groupedSubtests).map((category) => {
+                  const items = groupedSubtests[category].filter(
+                    (s: any) =>
+                      s.section
+                        .toLowerCase()
+                        .includes(filterText.toLowerCase()) ||
+                      (s.packageName || "")
+                        .toLowerCase()
+                        .includes(filterText.toLowerCase())
+                  );
+
+                  if (items.length === 0) return null;
+
+                  return (
+                    <div key={category} className="subtest-category">
+                      <h4 className="category-title">{category}</h4>
+                      <div className="subtest-wrapper">
+                        {items.map((s: any, index: number) => (
+                          <div
+                            key={index}
+                            className={`subtest-item ${
+                              selectedSubtest === s.section ? "selected" : ""
+                            }`}
+                            onClick={() => setSelectedSubtest(s.section)}
+                          >
+                            <div className="subtest-icon">📘</div>
+
+                            <div className="subtest-text">
+                              <div
+                                className="subtest-title"
+                                dangerouslySetInnerHTML={{
+                                  __html: highlight(
+                                    s.packageName || s.section,
+                                    filterText
+                                  ),
+                                }}
+                              ></div>
+
+                              <div className="subtest-meta">
+                                Total Soal: {s.total_questions}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
             <div className="popup__confirmation__buttons">
               <button
-                className="popup__confirmation__button popupConfirmation__button--yes"
+                disabled={isLoadingSubtest || !selectedSubtest}
+                className={`popup__confirmation__button popup__confirmation__button--yes ${
+                  !selectedSubtest ? "disabled" : ""
+                }`}
+                style={{ fontSize: "1.5rem" }}
+                onClick={async () => await startTest()}
+              >
+                {isLoadingSubtest ? "Loading..." : "Mulai"}
+              </button>
+
+              <button
+                className="popup__confirmation__button popup__confirmation__button--cancel"
+                style={{ fontSize: "1.5rem" }}
                 onClick={() => {
-                  startTest();
-                  navigate(`/PackageTest?for=${choosedId}`);
+                  setAnimClass("popup__content--hidden");
+                  setTimeout(
+                    () => setPopupConfirmationclass("popup__confirmation"),
+                    200
+                  );
+                  setSelectedSubtest("");
                 }}
               >
-                ✅ Yes, submit
-              </button>
-              <button
-                className="popup__confirmation__button popupConfirmation__button--cancel"
-                onClick={() => setPopupConfirmationclass("popup__confirmation")}
-              >
-                ❌ Cancel
+                Batal
               </button>
             </div>
           </div>

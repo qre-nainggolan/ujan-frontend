@@ -34,7 +34,7 @@ export default observer(function MainPage() {
     {
       header: "Tanggal",
       key: "started_at",
-      width: 140,
+      width: 170,
       render: (row: any) => {
         const d = row.started_at ? new Date(row.started_at) : null;
         return d && !isNaN(d.getTime())
@@ -73,26 +73,46 @@ export default observer(function MainPage() {
         <div className="layout__body">
           <NavLane />
           <main className="layout__main">
-            <h1>Ringkasan Nilai</h1>
-            <div className="table-sensor">
-              <DataGrid
-                data={listUserScore || []}
-                columns={scoreColumns}
-                selectedIndex={selectedIndex}
-                onRowClick={(_, i) => setSelectedIndex(i)}
-                currentPage={currentPage}
-                totalPages={totalPages}
-                totalRecords={totalData}
-                pageSize={pageSize}
-                onPageChange={(newPage) => {
-                  loadUserScore("", newPage);
-                }}
-                onPageSizeChange={(newSize) => {
-                  setPageSize(newSize);
-                  loadUserScore("", 1);
-                }}
-              />
+            <div className="top-banner">
+              <div>
+                <h2>Halo, </h2>
+
+                <p className="page-subtitle">
+                  Ini adalah ringkasan nilai ujian terbaru Anda. Lihat progres
+                  nilai Anda dari waktu ke waktu
+                </p>
+              </div>
+              <div className="chip-row">
+                <div className="chip">
+                  Total Simulasi Gratis: <b>{listUserScore.length}</b>
+                </div>
+                <div className="chip">
+                  Average Score: <b>63.5%</b>
+                </div>
+                <div className="chip">
+                  Best Score: <b>95%</b>
+                </div>
+              </div>
             </div>
+            <div className="section-divider"></div>
+
+            <DataGrid
+              data={listUserScore || []}
+              columns={scoreColumns}
+              selectedIndex={selectedIndex}
+              onRowClick={(_, i) => setSelectedIndex(i)}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              totalRecords={totalData}
+              pageSize={pageSize}
+              onPageChange={(newPage) => {
+                loadUserScore("", newPage);
+              }}
+              onPageSizeChange={(newSize) => {
+                setPageSize(newSize);
+                loadUserScore("", 1);
+              }}
+            />
           </main>
         </div>
         <Footer />

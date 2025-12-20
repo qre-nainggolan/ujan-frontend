@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "../css/style.css";
 
 import logo from "../img/logo.png";
@@ -8,9 +8,11 @@ import about2 from "../img/about-2.webp";
 import about2large from "../img/about-2-large.webp";
 import about3 from "../img/about-3.webp";
 import about3large from "../img/about-3-large.webp";
+import modalRight from "../img/modal-right.png";
 
 import { useStore } from "../app/store/store";
-import { Formik } from "formik";
+import regions from "../data/region.json";
+import instances from "../data/instance.json";
 
 import { useNavigate } from "react-router-dom";
 import { observer } from "mobx-react-lite";
@@ -27,9 +29,19 @@ export default observer(function PublicPage() {
     setConfirmPassword,
     setRegistrationValue,
     register,
+    successMessage,
+    errorMessage,
   } = AuthenticationStore;
 
   const navigate = useNavigate();
+
+  // 🔹 State to control modal visibility
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
+
+  const [cities, setCities] = useState<string[]>([]);
+
+  const [customInstance, setCustomInstance] = useState("");
+  const isOther = registrationValue.appliedInstance === "Lainnya";
 
   useEffect(() => {
     if (import.meta.hot) {
@@ -37,18 +49,36 @@ export default observer(function PublicPage() {
         console.log("HMR updating, preventing login request.");
       });
     }
-
     if (!userProfile) loadUserProfile();
-  }, [userProfile]);
+  }, [userProfile, loadUserProfile]);
 
   const handleLogin = async () => {
-    const user = await login();
-    if (user?.token && user.token !== "NoUser") {
-      sessionStorage.setItem("user", JSON.stringify(user));
-      setToken(user.token);
-      await loadUserProfile();
-      console.log("Tester");
-      navigate("/MainPage");
+    AuthenticationStore.clearMessages();
+    if (!userLoginValue.password || !userLoginValue.email) {
+      AuthenticationStore.setError("Username/Email dan password wajib diisi.");
+      autoClearToast();
+      return;
+    }
+    try {
+      const user = await login();
+      if (user?.token && user.token !== "NoUser") {
+        sessionStorage.setItem("user", JSON.stringify(user));
+        setToken(user.token);
+        await loadUserProfile();
+        navigate("/MainPage");
+      }
+    } catch (err: any) {
+      console.log(err.response.data.error);
+      if (err.response.data.error === "invalid credentials") {
+        AuthenticationStore.setError(
+          "Gagal login. Username dan password tidak ditemukan di data user "
+        );
+        autoClearToast();
+        return;
+      }
+
+      AuthenticationStore.setError("Gagal login ." + err + " :: " + err.status);
+      autoClearToast();
     }
   };
 
@@ -61,12 +91,53 @@ export default observer(function PublicPage() {
   function toggleNavigation() {
     const checkbox_ = document.getElementById(
       "navi-toggle"
-    ) as HTMLInputElement;
-    checkbox_.checked = false;
+    ) as HTMLInputElement | null;
+    if (checkbox_) checkbox_.checked = false;
   }
+
+  const handleRegisterSubmit = async () => {
+    AuthenticationStore.clearMessages();
+
+    if (!registrationValue.username || !registrationValue.email) {
+      AuthenticationStore.setError("Username dan email wajib diisi.");
+      autoClearToast();
+      return;
+    }
+
+    if (!registrationValue.password) {
+      AuthenticationStore.setError("Password wajib diisi.");
+      autoClearToast();
+      return;
+    }
+
+    if (registrationValue.password !== confirmPassword) {
+      AuthenticationStore.setError("Password dan ulangi password belum sama.");
+      autoClearToast();
+      return;
+    }
+
+    try {
+      await register();
+      AuthenticationStore.setSuccess("Pendaftaran berhasil! Silakan login.");
+      autoClearToast();
+
+      // Optional: add behavior after success
+      // window.location.hash = "";
+    } catch (err) {
+      AuthenticationStore.setError("Registrasi gagal. Coba lagi.");
+      autoClearToast();
+    }
+  };
+
+  const autoClearToast = () => {
+    setTimeout(() => {
+      AuthenticationStore.clearMessages();
+    }, 3000); // auto-hide after 3s
+  };
 
   return (
     <>
+      {/* NAVIGATION */}
       <div className="navigation">
         <input
           type="checkbox"
@@ -94,7 +165,7 @@ export default observer(function PublicPage() {
                 className="navigation__link"
                 onClick={toggleNavigation}
               >
-                <span>01</span>Tentang Ujan (Ujian Online)
+                <span>01</span>Tentang Lulusku
               </a>
             </li>
             <li className="navigation__item">
@@ -126,7 +197,7 @@ export default observer(function PublicPage() {
             </li>
             <li className="navigation__item">
               <a
-                href="section-main"
+                href="#section-main"
                 className="navigation__link"
                 onClick={toggleNavigation}
               >
@@ -136,14 +207,16 @@ export default observer(function PublicPage() {
           </ul>
         </nav>
       </div>
+
+      {/* HEADER */}
       <header className="header" id="section-header"></header>
       <div className="header__logo-box">
         <img src={logo} alt="Company Logo" />
       </div>
       <div className="header__text-box">
         <h1 className="heading-primary">
-          <span className="heading-primary--main">Ujan</span>
-          <span className="heading-primary--sub">Raih Skor Impianmu</span>
+          <span className="heading-primary--main">Lulusku</span>
+          <span className="heading-primary--sub">Gapai Impianmu</span>
         </h1>
         <a
           href="#section-learning-packages"
@@ -152,7 +225,9 @@ export default observer(function PublicPage() {
           <b>Coba Free &rarr;</b>
         </a>
       </div>
+
       <main>
+        {/* SECTION ABOUT */}
         <section className="section-about" id="section-about">
           <div className="u-center-text u-margin-bottom-medium">
             <h2 className="heading-secondary">
@@ -165,8 +240,8 @@ export default observer(function PublicPage() {
                 Mengasah Kemampuan
               </h3>
               <p className="paragraph">
-                Dengan berbagai soal ioT yang mencakup beragam mata pelajaran,
-                siswa dapat mengasah kemampuan analisis, pemecahan masalah, dan
+                Dengan berbagai soal yang mencakup beragam mata pelajaran, siswa
+                dapat mengasah kemampuan analisis, pemecahan masalah, dan
                 pemahaman konsep secara mendalam
               </p>
               <h3 className="heading-tertiary u-margin-bottom-small">
@@ -181,9 +256,9 @@ export default observer(function PublicPage() {
                 Evaluasi Mandiri & Dari Para Ahli
               </h3>
               <p className="paragraph">
-                Ujian online ini memberikan feedback langsung, sehingga siswa
-                dapat mengetahui area yang perlu ditingkatkan dan memantau
-                perkembangan belajar mereka secara berkala.
+                Keuntungan online ini dapat memberikan feedback secara cepat,
+                sehingga user dapat mengetahui area yang perlu ditingkatkan dan
+                memantau perkembangan belajar mereka secara berkala.
               </p>
 
               <a href="#" className="btn-text">
@@ -199,7 +274,6 @@ export default observer(function PublicPage() {
                   src={about1large}
                   alt="Photo 1"
                 />
-
                 <img
                   srcSet={`${about2} 300w, ${about2large} 1000w`}
                   sizes="(max-width:56.25em) 20vh, (max-width:37.5em) 30vh, 300px"
@@ -207,7 +281,6 @@ export default observer(function PublicPage() {
                   src={about2large}
                   alt="Photo 2"
                 />
-
                 <img
                   srcSet={`${about3} 300w, ${about3large} 1000w`}
                   sizes="(max-width:56.25em) 20vh, (max-width:37.5em) 30vh, 300px"
@@ -219,6 +292,8 @@ export default observer(function PublicPage() {
             </div>
           </div>
         </section>
+
+        {/* SECTION MAIN (LOGIN) */}
         <section id="section-main" className="section-main">
           <div className="row">
             <div className="book">
@@ -234,6 +309,7 @@ export default observer(function PublicPage() {
                     placeholder="Email"
                     id="email"
                     onKeyDown={handleKeyDown}
+                    autoComplete="off"
                     value={userLoginValue.email}
                     onChange={(e) => setLoginValue("email", e.target.value)}
                     required
@@ -247,39 +323,41 @@ export default observer(function PublicPage() {
                     type="password"
                     className="form__input"
                     placeholder="Password"
-                    id="name"
+                    id="password-login"
+                    autoComplete="off"
                     onKeyDown={handleKeyDown}
                     required
                     value={userLoginValue.password}
                     onChange={(e) => setLoginValue("password", e.target.value)}
                   />
-                  <label htmlFor="name" className="form__label">
+                  <label htmlFor="password-login" className="form__label">
                     Password
                   </label>
                 </div>
                 <div className="form__group">
-                  <button
-                    className="btn btn--green"
-                    onClick={() => {
-                      handleLogin();
-                    }}
-                  >
+                  <button className="btn btn--green" onClick={handleLogin}>
                     Login &rarr;
                   </button>
                 </div>
                 <div className="form__group">
-                  <a
-                    href="#popup-new-account-registration"
+                  {/* 🔹 Open modal on click */}
+                  <button
+                    type="button"
                     className="btn btn--green"
                     id="CreateAccountHref"
+                    onClick={() => {
+                      setShowRegisterModal(true);
+                    }}
                   >
-                    Buat Akun &rarr;
-                  </a>
+                    Buat Akun Baru &rarr;
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         </section>
+
+        {/* SECTION LEARNING PACKAGES */}
         <section
           className="section-learning-packages"
           id="section-learning-packages"
@@ -388,140 +466,190 @@ export default observer(function PublicPage() {
               </div>
             </div>
           </div>
+
           <div className="u-center-text u-margin-top-big">
             <a href="" className="btn btn--green">
-              Temukan Semua Paket Ujian & Latihan
+              Temukan Semua Paket Soal & Latihan
             </a>
           </div>
         </section>
       </main>
-      <div className="popup-account" id="popup-new-account-registration">
-        <div className="popup-account__content">
-          <div className="popup-account__full">
-            <a href="#section-tours" className="popup-account__close">
+      {showRegisterModal && (
+        <div
+          className="register-modal"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowRegisterModal(false);
+          }}
+        >
+          <div className="modal-content">
+            {/* Close button on top-right */}
+            <button
+              type="button"
+              className="close-btn"
+              onClick={() => setShowRegisterModal(false)}
+            >
               &times;
-            </a>
-            <h2 className="heading-secondary-registration u-margin-bottom-small">
-              Daftar dan mulai perjalanan menuju CPNS impian!
-            </h2>
-            <h2 className="heading-tertiary u-margin-bottom-small">
-              85% peserta CPNS yang berlatih secara rutin memiliki peluang lebih
-              besar untuk lolos
-            </h2>
-            <div className="registration">
-              <div className="registration__form">
-                <div className="u-margin-bottom-small">
-                  <h2 className="heading-secondary">Lengkapi Akun</h2>
+            </button>
+            <div className="modal-left">
+              <label className="heading-secondary-registration u-margin-bottom-small">
+                Daftar & gapai karier impian!
+              </label>
+
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleRegisterSubmit();
+                }}
+                className="register-form"
+              >
+                <div className="form__group">
+                  <input
+                    type="text"
+                    className="form__input__account"
+                    placeholder="Username"
+                    autoComplete="off"
+                    id="username"
+                    value={registrationValue.username}
+                    onChange={(e) =>
+                      setRegistrationValue("username", e.target.value)
+                    }
+                    required
+                  />
                 </div>
-                <Formik
-                  initialValues={registrationValue}
-                  enableReinitialize
-                  onSubmit={() => register()}
-                >
-                  {() => (
-                    <>
-                      <div className="form__group">
-                        <input
-                          type="text"
-                          className="form__input__account"
-                          placeholder="Username"
-                          id="username"
-                          value={registrationValue.username}
-                          onChange={(e) =>
-                            setRegistrationValue("username", e.target.value)
-                          }
-                          required
-                        />
-                        <label htmlFor="email" className="form__label">
-                          Username
-                        </label>
-                      </div>
-                      <div className="form__group">
-                        <input
-                          type="email"
-                          className="form__input__account"
-                          placeholder="Email"
-                          id="nama"
-                          value={registrationValue.email}
-                          onChange={(e) =>
-                            setRegistrationValue("email", e.target.value)
-                          }
-                          required
-                        />
-                        <label htmlFor="email" className="form__label">
-                          Email
-                        </label>
-                      </div>
-                      <div className="form__group">
-                        <input
-                          type="password"
-                          className="form__input__account"
-                          placeholder="Password"
-                          id="password"
-                          required
-                          value={registrationValue.password}
-                          onChange={(e) =>
-                            setRegistrationValue("password", e.target.value)
-                          }
-                        />
-                        <label htmlFor="name" className="form__label">
-                          Password
-                        </label>
-                      </div>
-                      <div className="form__group">
-                        <input
-                          type="password"
-                          className="form__input__account"
-                          placeholder="Ulangi Password"
-                          id="retypePassword"
-                          required
-                          value={confirmPassword}
-                          onChange={(e) => setConfirmPassword(e.target.value)}
-                        />
-                        <label htmlFor="name" className="form__label">
-                          Ulangi Password
-                        </label>
-                      </div>
-                      <div className="form__group">
-                        <input
-                          type="text"
-                          className="form__input__account"
-                          placeholder="Instansi yang akan/sedang dilamar"
-                          id="appliedInstance"
-                          value={registrationValue.appliedInstance}
-                          onChange={(e) =>
-                            setRegistrationValue(
-                              "appliedInstance",
-                              e.target.value
-                            )
-                          }
-                          required
-                        />
-                        <label
-                          htmlFor="appliedInstance"
-                          className="form__label"
-                        >
-                          Instansi yang akan/sedang dilamar
-                        </label>
-                      </div>
-                      <div className="form__group">
-                        <button
-                          className="btn btn--green"
-                          onClick={() => {
-                            register();
-                          }}
-                        >
-                          Kirim &rarr;
-                        </button>
-                      </div>
-                    </>
-                  )}
-                </Formik>
-              </div>
+                <div className="form__group">
+                  <input
+                    type="email"
+                    autoComplete="off"
+                    className="form__input__account"
+                    placeholder="Email"
+                    id="email-register"
+                    value={registrationValue.email}
+                    onChange={(e) =>
+                      setRegistrationValue("email", e.target.value)
+                    }
+                    required
+                  />
+                </div>
+                <div className="form__group">
+                  <input
+                    type="password"
+                    autoComplete="off"
+                    className="form__input__account"
+                    placeholder="Password"
+                    id="password"
+                    value={registrationValue.password}
+                    onChange={(e) =>
+                      setRegistrationValue("password", e.target.value)
+                    }
+                    required
+                  />
+                </div>
+                <div className="form__group">
+                  <input
+                    type="password"
+                    autoComplete="off"
+                    className="form__input__account"
+                    placeholder="Ulangi Password"
+                    id="retypePassword"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="form__group">
+                  <select
+                    className="form__input__account"
+                    id="appliedInstance"
+                    value={
+                      isOther ? "Lainnya" : registrationValue.appliedInstance
+                    }
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (value === "Lainnya") {
+                        setRegistrationValue("appliedInstance", "Lainnya");
+                      } else {
+                        setRegistrationValue("appliedInstance", value);
+                        setCustomInstance(""); // clear custom input
+                      }
+                    }}
+                    required
+                  >
+                    <option value="">Pilih Instansi</option>
+                    {instances.map((inst: any, idx: any) => (
+                      <option key={idx} value={inst}>
+                        {inst}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {isOther && (
+                  <div className="form__group u-margin-top-small">
+                    <input
+                      type="text"
+                      autoComplete="off"
+                      className="form__input__account"
+                      placeholder="Masukkan nama instansi..."
+                      value={customInstance}
+                      onChange={(e) => {
+                        setCustomInstance(e.target.value);
+                        setRegistrationValue(
+                          "appliedInstanceOther",
+                          e.target.value
+                        );
+                      }}
+                      required
+                    />
+                  </div>
+                )}
+                <div className="form__group">
+                  <select
+                    value={registrationValue.province}
+                    className="form__input__account"
+                    onChange={(e) => {
+                      setRegistrationValue("province", e.target.value);
+                      const province = regions.find(
+                        (p) => p.province === e.target.value
+                      );
+                      setCities(province?.cities || []);
+                    }}
+                  >
+                    <option value="">Pilih Provinsi</option>
+                    {regions.map((p) => (
+                      <option key={p.province}>{p.province}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="form__group">
+                  <select
+                    value={registrationValue.city}
+                    className="form__input__account"
+                    onChange={(e) =>
+                      setRegistrationValue("city", e.target.value)
+                    }
+                  >
+                    <option value="">Pilih Kota / Kabupaten</option>
+                    {cities.map((city) => (
+                      <option key={city}>{city}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="form__group">
+                  <button className="btn btn--green" type="submit">
+                    Kirim &rarr;
+                  </button>
+                </div>
+              </form>
+            </div>
+            <div className="modal-right">
+              <img src={modalRight} alt="Registration Art" />
             </div>
           </div>
         </div>
-      </div>
+      )}
+      {successMessage && (
+        <div className="toast toast--success">{successMessage}</div>
+      )}
+      {errorMessage && <div className="toast toast--error">{errorMessage}</div>}
     </>
   );
 });

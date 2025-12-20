@@ -27,7 +27,7 @@ export default function Header() {
   }, [userProfile]);
 
   const handleLogout = () => {
-    agent.Account.logout(localStorage?.getItem("ujanSessionId")!)
+    agent.Account.logout()
       .then((response) => {
         console.log(response);
         localStorage.removeItem("user");

@@ -39,7 +39,6 @@
   position: relative; /* Important for sticky to work */
   border-radius: 0.75rem;
   box-shadow: 0 0 1.2rem rgba(0, 0, 0, 0.05);
-  max-width: 100%;
 }
 
 @media only screen and (max-width: 60rem) {
@@ -64,9 +63,22 @@
   box-shadow: 0 0 1.2rem rgba(0, 0, 0, 0.05);
 }
 
+.sensor-table {
+  table-layout: auto; /* allow columns to auto-size */
+}
+
+.sensor-table th,
+.sensor-table td {
+  white-space: nowrap; /* keep default */
+}
+
+.cell-wrap {
+  white-space: normal !important;
+  word-break: break-word;
+}
+
 /* Fancy table layout */
 .sensor-table {
-  width: max-content; /* Changed from 100% to support horizontal scroll */
   border-spacing: 0;
   border-collapse: separate;
   color: #2e2e2e;
@@ -87,12 +99,10 @@
 .sensor-table th,
 .sensor-table td {
   box-sizing: border-box;
-  width: 100%;
   border: 0.1rem solid #d0e4cc;
   padding: 0.75rem 1rem;
   text-align: left;
   vertical-align: middle;
-  white-space: nowrap; /* Prevent wrapping in cells */
   transition: all 0.3s ease;
 }
 
@@ -134,7 +144,9 @@
 
 /* Hover & selected rows */
 .sensor-table tbody tr:hover {
-  background-color: #d6f4db;
+  background: #e8f7ec;
+  transform: scale(1.003);
+  transition: 0.1s ease;
   cursor: pointer;
 }
 
@@ -171,29 +183,6 @@
   color: #444;
 }
 
-/* Pagination buttons */
-.pagination button {
-  margin: 0 0.5rem;
-  padding: 0.45rem 1rem;
-  border-radius: 0.6rem;
-  border: none;
-  background-color: #00880d;
-  color: white;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-}
-
-.pagination button:hover:not(:disabled) {
-  background-color: #006e0b;
-}
-
-.pagination button:disabled {
-  background-color: #c2e0c4;
-  color: #eee;
-  cursor: not-allowed;
-}
-
 /* Improvements to implement:
 1. Keep both group headers and child headers sticky together while scrolling vertically.
 2. Ensure ungrouped headers are visually aligned with grouped ones. */
@@ -209,7 +198,7 @@
   text-align: center;
   z-index: 50 !important;
   height: 1.65rem;
-  white-space: nowrap;
+
   overflow: hidden;
 }
 
@@ -218,7 +207,7 @@
   top: 0;
   z-index: 11 !important; /* Raise above subheaders */
   background-color: rgba(0, 136, 13, 0.95);
-  white-space: nowrap;
+
   cursor: pointer;
   padding: 0.75rem 1rem;
   box-sizing: border-box;
@@ -256,7 +245,6 @@
   z-index: 11 !important;
   box-sizing: border-box;
   overflow: hidden;
-  white-space: nowrap;
 
   /* ✅ Remove this from .sticky-col globally */
   /* top: 0; */
@@ -325,7 +313,6 @@
 
 /* ================= Cell Style for Ellipsis ================== */
 .cell-ellipsis {
-  white-space: nowrap; /* Prevent wrapping */
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -353,4 +340,133 @@ th:hover .pin-icon {
 
 .column-header .show {
   opacity: 1;
+}
+
+/* Pagination buttons */
+.pagination button {
+  margin: 0 0.5rem;
+  padding: 0.45rem 1rem;
+  border-radius: 0.6rem;
+  border: none;
+  background-color: #00880d;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #006e0b;
+}
+
+.pagination button:disabled {
+  background-color: #c2e0c4;
+  color: #eee;
+  cursor: not-allowed;
+}
+
+.table-wrapper {
+  position: relative;
+  width: max-content;
+  max-width: 100%;
+  overflow: visible !important;
+}
+
+/* Table container: ALLOW vertical scrolling, hide native scrollbar */
+.table-container {
+  overflow-y: auto;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /* required for mobile */
+}
+
+/* Hide native scrollbar (Chrome, Edge, Safari) */
+.table-container::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+/* Hide native scrollbar (Firefox) */
+.table-container {
+  scrollbar-width: none;
+}
+
+/* Floating vertical scrollbar */
+.dg-vscrollbar {
+  position: absolute;
+  top: 0;
+  right: -14px; /* adjust distance from table */
+  width: 12px;
+  height: 100%;
+  background: #e8e8e8;
+  border-radius: 6px;
+  cursor: pointer;
+  z-index: 9999;
+  overflow: hidden;
+
+  /* fade-out behavior */
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* When active / visible */
+.dg-vscrollbar.dg-visible {
+  opacity: 1;
+}
+
+.dg-vscrollbar-thumb {
+  width: 100%;
+  height: 40px; /* will be updated via JS */
+  background: #00880d;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+
+.dg-vscrollbar-thumb:hover {
+  background: #00b21a;
+}
+
+/* ------------------------------
+   HORIZONTAL SCROLLBAR
+--------------------------------*/
+.dg-hscrollbar {
+  position: absolute;
+  bottom: -1.5rem;
+  left: 0;
+  height: 12px;
+  width: 100%;
+  background: #e8e8e8;
+  border-radius: 6px;
+  opacity: 1; /* always visible */
+  transition: none; /* remove fade */
+  z-index: 9999;
+  display: none; /* will be changed to block when needed */
+}
+
+.dg-hscrollbar.dg-visible {
+  opacity: 1;
+}
+
+.dg-hscrollbar-thumb {
+  height: 100%;
+  background: #00880d;
+  border-radius: 6px;
+  width: 40px;
+  transform: translateX(0px);
+  transition: background 0.2s ease;
+}
+
+.dg-hscrollbar-thumb:hover {
+  background: #00b21a;
+}
+
+@media (max-width: 768px) {
+  .table-container {
+    overflow-x: auto;
+    overflow-y: auto;
+    touch-action: pan-x pan-y;
+  }
+
+  .dg-hscrollbar {
+    display: none !important; /* ❗ rely on native scroll on mobile */
+  }
 }

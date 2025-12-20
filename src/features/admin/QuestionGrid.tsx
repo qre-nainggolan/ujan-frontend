@@ -44,6 +44,10 @@ export default observer(function QuestionGrid() {
     setShowModal,
     showConfirmation,
     setShowConfirmation,
+    Type_ID_Grid,
+    setTypeIDGrid,
+    listTypePackageGrid,
+    loadTypePackageGrid,
   } = QuestionStore;
 
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -106,6 +110,11 @@ export default observer(function QuestionGrid() {
       width: 200,
     },
     {
+      header: "Penjelasan",
+      key: "Explanation",
+      width: 200,
+    },
+    {
       header: "Time",
       key: "DateCreate",
       width: 160,
@@ -143,6 +152,15 @@ export default observer(function QuestionGrid() {
     setField(name as keyof QuestionSubmissionValues, value);
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+
+    setField("imageFile" as keyof QuestionSubmissionValues, file);
+
+    const previewURL = file ? URL.createObjectURL(file) : null;
+    setField("imagePreview" as keyof QuestionSubmissionValues, previewURL);
+  };
+
   return (
     <>
       <div className="layout">
@@ -157,7 +175,7 @@ export default observer(function QuestionGrid() {
                   value={Package_ID}
                   onChange={(e) => {
                     SetPackage_ID(e.target.value);
-                    console.log(e.target.value);
+                    loadTypePackageGrid(e.target.value);
                   }}
                   className="selection__input"
                 >
@@ -167,6 +185,30 @@ export default observer(function QuestionGrid() {
                       {row.Name}
                     </option>
                   ))}
+                </select>
+                <select
+                  id="Type_ID_Grid"
+                  data-testid="type_id_grid"
+                  className="selection__input"
+                  value={Type_ID_Grid}
+                  onChange={(e) => {
+                    setTypeIDGrid(e.target.value);
+                  }}
+                  required
+                >
+                  <option value="">-- Pilih Jenis Paket --</option>
+                  {listTypePackageGrid ? (
+                    listTypePackageGrid.map((row) => (
+                      <option
+                        key={`form-${row.Type_ID}`}
+                        value={row.Type_ID + ""}
+                      >
+                        {row.Type_Name}
+                      </option>
+                    ))
+                  ) : (
+                    <></>
+                  )}
                 </select>
                 <input
                   type="datetime-local"
@@ -401,6 +443,51 @@ export default observer(function QuestionGrid() {
               </div>
             </div>
             <div className="form-row">
+              <div>
+                <label key="imageQuestion" htmlFor="image">
+                  Gambar
+                </label>
+                <input
+                  data-testid={`imageQuestion`}
+                  name="ImageQuestion"
+                  type="file"
+                  accept="image/*"
+                  className="selection__input"
+                  onChange={handleImageChange}
+                />
+              </div>
+              <div>
+                <label>Preview</label>
+                <div style={{ marginTop: "0.5rem" }}>
+                  {form?.imagePreview ? (
+                    <img
+                      src={form.imagePreview}
+                      alt="Preview"
+                      style={{
+                        width: "120px",
+                        height: "auto",
+                        borderRadius: "6px",
+                        border: "1px solid #ddd",
+                      }}
+                    />
+                  ) : (
+                    <span style={{ color: "#aaa" }}>No image</span>
+                  )}
+                </div>
+              </div>
+            </div>
+            <label htmlFor="Explanation">Penjelasan</label>
+            <textarea
+              data-testid="explanation"
+              name="Explanation"
+              id="Explanation"
+              className="selection__input"
+              value={form?.Explanation}
+              onChange={handleChangeFromStore}
+              required
+            />
+
+            <div className="form-row">
               <button
                 data-testid="submit-confirm"
                 className="btn btn--green"
@@ -433,6 +520,14 @@ export default observer(function QuestionGrid() {
               setForm(new QuestionSubmissionValues());
               setShowConfirmation(false);
               setShowModal(false);
+              fetchData(
+                Package_ID,
+                "",
+                startDate,
+                endDate,
+                currentPage,
+                pageSize
+              );
               toast.success("Pertanyaan berhasil ditambahkan!");
             } catch (err: any) {
               console.error("Error submitting question:", err);

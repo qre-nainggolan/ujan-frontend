@@ -1,0 +1,535 @@
+.progress-page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 3rem;
+}
+
+/* Header */
+.progress-page__header {
+  margin-bottom: 1.5rem;
+}
+
+.progress-page__subtitle {
+  font-size: 1.4rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+/* Summary */
+.progress-summary {
+  background: #ffffff;
+  border-radius: 1.2rem;
+  padding: 1.6rem 1.5rem;
+  box-shadow: 0 0.8rem 2.4rem rgba(0, 0, 0, 0.06);
+  margin-bottom: 1.8rem;
+}
+
+.progress-summary__title {
+  font-size: 1.6rem;
+  margin-bottom: 1.2rem;
+}
+
+.progress-summary__content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.4rem;
+}
+
+.progress-summary__item {
+  min-width: 9rem;
+  flex: 1;
+}
+
+.progress-summary__label {
+  display: block;
+  font-size: 1.2rem;
+  color: #777;
+  margin-bottom: 0.3rem;
+}
+
+.progress-summary__value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.progress-summary__empty {
+  font-size: 1.3rem;
+  color: #777;
+}
+
+/* History */
+.progress-history {
+  background: #ffffff;
+  border-radius: 1.2rem;
+  padding: 1.6rem 1.5rem;
+  box-shadow: 0 0.8rem 2.4rem rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.8rem;
+}
+
+.progress-history__title {
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+}
+
+.progress-history__loading,
+.progress-history__empty {
+  font-size: 1.3rem;
+  color: #777;
+}
+
+.progress-history__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.progress-history__item {
+  padding: 0.9rem 0.2rem;
+  border-bottom: 1px solid #e5e7eb;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.progress-history__item:last-child {
+  border-bottom: none;
+}
+
+.progress-history__item:hover {
+  background: #f9fafb;
+}
+
+.progress-history__main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.progress-history__names {
+  flex: 1;
+  min-width: 0;
+}
+
+.progress-history__subtest {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.progress-history__package {
+  font-size: 1.2rem;
+  color: #6b7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.progress-history__score {
+  flex-shrink: 0;
+}
+
+.progress-history__score-badge {
+  display: inline-block;
+  min-width: 4.5rem;
+  text-align: center;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+/* Score colors */
+.progress-history__score-badge--high {
+  background-color: #ecfdf3;
+  color: #166534;
+}
+
+.progress-history__score-badge--medium {
+  background-color: #eff6ff;
+  color: #1d4ed8;
+}
+
+.progress-history__score-badge--low {
+  background-color: #fef2f2;
+  color: #b91c1c;
+}
+
+.progress-history__meta {
+  margin-top: 0.2rem;
+  font-size: 1.2rem;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.progress-history__link {
+  margin-left: auto;
+  color: #2563eb;
+  font-weight: 500;
+}
+
+/* Learning Plan */
+.progress-plan {
+  background: #ffffff;
+  border-radius: 1.2rem;
+  padding: 1.6rem 1.5rem;
+  box-shadow: 0 0.8rem 2.4rem rgba(0, 0, 0, 0.04);
+}
+
+.progress-plan__title {
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+}
+
+.progress-plan__card {
+  border-radius: 1rem;
+  background: #f9fafb;
+  padding: 1.4rem 1.3rem;
+}
+
+.progress-plan__weak-label,
+.progress-plan__next-label {
+  font-size: 1.2rem;
+  color: #6b7280;
+  margin-bottom: 0.3rem;
+}
+
+.progress-plan__weak-area {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #b91c1c;
+  margin-bottom: 0.9rem;
+}
+
+.progress-plan__suggested {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 0.6rem;
+}
+
+.progress-plan__note {
+  font-size: 1.25rem;
+  color: #4b5563;
+  margin-bottom: 1rem;
+}
+
+.progress-plan__button {
+  display: inline-block;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #4ade80, #22c55e);
+  color: #ffffff;
+  font-size: 1.35rem;
+  font-weight: 600;
+  padding: 0.7rem 1.6rem;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  box-shadow: 0 0.7rem 1.4rem rgba(34, 197, 94, 0.35);
+}
+
+.progress-plan__button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 1rem 2rem rgba(34, 197, 94, 0.45);
+}
+
+.progress-plan__empty {
+  font-size: 1.3rem;
+  color: #6b7280;
+}
+
+/* ---------------------------------- */
+/* Mobile tweaks                      */
+/* ---------------------------------- */
+@media (max-width: 640px) {
+  .progress-page {
+    padding: 1.2rem 1rem 2.5rem;
+  }
+
+  .progress-summary__content {
+    flex-direction: column;
+  }
+
+  .progress-history__main {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .progress-history__link {
+    margin-left: 0;
+  }
+}
+
+.progress-chart-box {
+  margin: 1rem 0 1.5rem;
+  padding: 0.8rem 0.2rem;
+  border-radius: 10px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: center;
+}
+
+/* === DARK OVERLAY === */
+.history-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.25s ease;
+}
+
+/* === MODAL BOX === */
+.history-modal {
+  width: 90%;
+  max-width: 720px;
+  max-height: 80vh;
+  background: #fff;
+  border-radius: 1.2rem;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  overflow-y: auto;
+  animation: slideUp 0.25s ease;
+}
+
+/* Close Button */
+.history-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1.2rem;
+  background: #eee;
+  border: none;
+  font-size: 1.3rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.history-close-btn:hover {
+  background: #ddd;
+}
+
+/* === Timeline Group Title === */
+.month-title {
+  font-size: 1.4rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  color: #333;
+}
+
+/* === Timeline Item === */
+.history-item {
+  padding: 0.9rem 1rem;
+  margin-bottom: 0.4rem;
+  border-radius: 0.8rem;
+  background: #fafafa;
+  border: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.history-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.history-subtest {
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.history-meta {
+  color: #777;
+  font-size: 0.95rem;
+}
+
+/* Score Badge */
+.score-badge {
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: white;
+}
+
+.score-high {
+  background: #16a34a;
+}
+.score-medium {
+  background: #2563eb;
+}
+.score-low {
+  background: #dc2626;
+}
+
+/* === ANIMATIONS === */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* OVERLAY */
+.history-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.25s ease;
+}
+
+/* MODAL CONTAINER */
+.history-modal {
+  position: relative;
+  width: 90%;
+  max-width: 720px;
+  max-height: 80vh;
+  background: #fff;
+  border-radius: 1.2rem;
+  padding: 2rem 2rem 1rem 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  overflow-y: auto;
+  animation: slideUp 0.25s ease;
+}
+
+/* STICKY CLOSE BUTTON */
+.history-close-btn {
+  position: sticky;
+  top: 0;
+  float: right;
+  background: #f3f4f6;
+  border: none;
+  font-size: 1.2rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-left: auto;
+  margin-bottom: 0.8rem;
+  transition: 0.2s;
+  z-index: 1000;
+}
+
+.history-close-btn:hover {
+  background: #e2e8f0;
+}
+
+/* SEARCH BOX */
+.history-search-input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 1.1rem;
+}
+
+/* MONTH TITLE */
+.month-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-top: 1.4rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+/* HISTORY ITEM */
+.history-item {
+  padding: 0.9rem 1rem;
+  border-radius: 0.8rem;
+  background: #fafafa;
+  border: 1px solid #eee;
+  margin-bottom: 0.4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* LEFT AREA */
+.history-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.history-subtest {
+  font-weight: 600;
+  font-size: 1.15rem;
+}
+
+.history-meta {
+  color: #777;
+  font-size: 0.95rem;
+}
+
+/* SCORE BADGES */
+.score-badge {
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: white;
+}
+
+.score-high {
+  background: #16a34a;
+}
+.score-medium {
+  background: #2563eb;
+}
+.score-low {
+  background: #dc2626;
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

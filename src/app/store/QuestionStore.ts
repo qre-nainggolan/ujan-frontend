@@ -18,16 +18,20 @@ export default class QuestionStore {
   formData: ListQuestion | null = null;
   listMainPackage: ListMainPackage[] = [];
   listTypePackage: ListTypePackage[] = [];
+  listTypePackageGrid: ListTypePackage[] = [];
   listUserPackage: ListUserPackage[] = [];
   loading = false;
 
   Package_ID = "";
+  Type_ID_Grid = "";
   startDate = this.getNow("yes");
   endDate = this.getNow("");
   currentPage = 1;
   totalPages = 1;
   totalData = 0;
   pageSize = 50;
+  imageFile?: File | null = null;
+  imagePreview?: string | null = null;
 
   constructor() {
     makeAutoObservable(this);
@@ -44,11 +48,22 @@ export default class QuestionStore {
     return `${yyyy}-${mm}-${dd}T${hh}:${mi}`;
   }
 
+  setTypeIDGrid = async (val: string) => {
+    this.Type_ID_Grid = val;
+  };
+
   setField = <P extends keyof QuestionSubmissionValues>(
     prop: P,
     value: QuestionSubmissionValues[P]
   ) => {
     this.form = { ...this.form, [prop]: value };
+  };
+
+  setFormValue = <P extends keyof QuestionSubmissionValues>(
+    prop: P,
+    value: QuestionSubmissionValues[P]
+  ) => {
+    this.form[prop] = value;
   };
 
   setForm = (data: QuestionSubmissionValues) => {
@@ -133,7 +148,7 @@ export default class QuestionStore {
       this.loading = true;
       const result = await agent.Package.getPaginatedQuestionList(
         Package_ID_,
-        "",
+        this.Type_ID_Grid,
         startDate_,
         endDate_,
         currentPage_,
@@ -161,7 +176,7 @@ export default class QuestionStore {
 
   loadUserPackage = async () => {
     try {
-      const result = await agent.Package.getPurchasedPackage();
+      const result = await agent.UserPackage.getPurchasedPackage();
       const data = Array.isArray(result?.data) ? result.data : [];
       runInAction(() => {
         this.listUserPackage = data;
@@ -192,6 +207,15 @@ export default class QuestionStore {
     }
   };
 
+  loadTypePackageGrid = async (packageId: string) => {
+    try {
+      const result = await agent.Package.getListTypePackage(packageId);
+      this.listTypePackageGrid = result.data;
+    } catch (error) {
+      console.error("loadTypePackages grid error:", error);
+    }
+  };
+
   sanitize = (text: string) => {
     return text
       .replace(/'/g, "&#39;")
@@ -200,30 +224,76 @@ export default class QuestionStore {
       .replace(/>/g, "&gt;");
   };
 
+  // submitQuestion = async () => {
+  //   if (!this.form.Package_ID || !this.form.Question || !this.form.Answer) {
+  //     throw new Error("Required fields are missing.");
+  //   }
+
+  //   const clean = {
+  //     ...this.form,
+  //     Question_ID: parseInt(this.form.Question_ID || "0"),
+  //     Package_ID: this.sanitize(this.form.Package_ID || ""),
+  //     Question: this.sanitize(this.form.Question || ""),
+  //     Type_ID: this.sanitize(this.form.Type_ID || ""),
+  //     OptionA: this.sanitize(this.form.OptionA || ""),
+  //     OptionB: this.sanitize(this.form.OptionB || ""),
+  //     OptionC: this.sanitize(this.form.OptionC || ""),
+  //     OptionD: this.sanitize(this.form.OptionD || ""),
+  //     OptionE: this.sanitize(this.form.OptionE || ""),
+  //     Note: "",
+  //     Image: "",
+  //     Category: "",
+  //     Explanation: this.sanitize(this.form.Explanation || ""),
+  //   };
+
+  //   try {
+  //     await agent.Package.submitQuestion(clean);
+  //     await this.fetchData(
+  //       this.Package_ID,
+  //       "",
+  //       this.startDate,
+  //       this.endDate,
+  //       this.currentPage,
+  //       this.pageSize
+  //     );
+  //   } catch (err) {
+  //     throw err;
+  //   }
+  // };
+
   submitQuestion = async () => {
     if (!this.form.Package_ID || !this.form.Question || !this.form.Answer) {
       throw new Error("Required fields are missing.");
     }
 
-    const clean = {
-      ...this.form,
-      Question_ID: parseInt(this.form.Question_ID || "0"),
-      Package_ID: this.sanitize(this.form.Package_ID || ""),
-      Question: this.sanitize(this.form.Question || ""),
-      Type_ID: this.sanitize(this.form.Type_ID || ""),
-      OptionA: this.sanitize(this.form.OptionA || ""),
-      OptionB: this.sanitize(this.form.OptionB || ""),
-      OptionC: this.sanitize(this.form.OptionC || ""),
-      OptionD: this.sanitize(this.form.OptionD || ""),
-      OptionE: this.sanitize(this.form.OptionE || ""),
-      Note: "",
-      Image: "",
-      Category: "",
-      Explanation: this.sanitize(this.form.Explanation || ""),
-    };
+    const formData = new FormData();
+
+    formData.append(
+      "Question_ID",
+      this.form.Question_ID ? this.form.Question_ID.toString() : "0"
+    );
+
+    formData.append("Package_ID", this.sanitize(this.form.Package_ID || ""));
+    formData.append("Question", this.sanitize(this.form.Question || ""));
+    formData.append("Type_ID", this.sanitize(this.form.Type_ID || ""));
+
+    formData.append("OptionA", this.sanitize(this.form.OptionA || ""));
+    formData.append("OptionB", this.sanitize(this.form.OptionB || ""));
+    formData.append("OptionC", this.sanitize(this.form.OptionC || ""));
+    formData.append("OptionD", this.sanitize(this.form.OptionD || ""));
+    formData.append("OptionE", this.sanitize(this.form.OptionE || ""));
+
+    formData.append("Answer", this.sanitize(this.form.Answer || ""));
+    formData.append("Explanation", this.sanitize(this.form.Explanation || ""));
+    formData.append("Category", this.sanitize(this.form.Category || ""));
+    formData.append("Note", this.sanitize(this.form.Note || ""));
+
+    if (this.form.imageFile) {
+      formData.append("image", this.form.imageFile);
+    }
 
     try {
-      await agent.Package.submitQuestion(clean);
+      await agent.Package.submitQuestion(formData);
       await this.fetchData(
         this.Package_ID,
         "",

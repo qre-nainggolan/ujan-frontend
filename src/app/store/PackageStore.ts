@@ -48,7 +48,7 @@ export default class PackageStore {
 
   loadUserPackage = async () => {
     try {
-      const result = await agent.Package.getPurchasedPackage();
+      const result = await agent.UserPackage.getPurchasedPackage();
       const data = Array.isArray(result?.data) ? result.data : [];
       runInAction(() => {
         this.listUserPackage = data;
@@ -63,7 +63,7 @@ export default class PackageStore {
 
   loadAvailablePackage = async () => {
     try {
-      const data = await agent.Package.getPackage();
+      const data = await agent.UserPackage.getPackage();
       runInAction(() => {
         this.listAvailablePackage = data;
       });

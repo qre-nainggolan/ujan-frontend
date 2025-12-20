@@ -1,6 +1,6 @@
 import Icons from "./img/sprite.svg"; // Path to your icons.svg
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "./app/store/store";
 
@@ -8,9 +8,24 @@ import { useStore } from "./app/store/store";
 export default observer(function NavLane() {
   const navigate = useNavigate();
   const { CommonStore } = useStore();
-  const { hamburgerState, setHamburgerState } = CommonStore;
+  const { hamburgerState, setHamburgerState, setNavLaneWidth, userProfile } =
+    CommonStore;
 
-  useEffect(() => {}, [hamburgerState]);
+  // ref to the nav element
+  const navRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    if (!navRef) return;
+    if (!navRef.current) return; // <-- eliminate null warning
+
+    if (hamburgerState === false) {
+      requestAnimationFrame(() => {
+        setNavLaneWidth(100);
+      });
+    } else {
+      setNavLaneWidth(100);
+    }
+  }, [hamburgerState]);
 
   function directPage(target: string) {
     setHamburgerState();
@@ -18,7 +33,10 @@ export default observer(function NavLane() {
   }
 
   return (
-    <nav className={`layout__nav-lane ${!hamburgerState ? "active" : ""}`}>
+    <nav
+      ref={navRef}
+      className={`layout__nav-lane ${!hamburgerState ? "active" : ""}`}
+    >
       <ul className="nav-menu">
         <li>
           <a
@@ -53,7 +71,14 @@ export default observer(function NavLane() {
               </a>
             </li>
             <li>
-              <a href="#">Perkembangan</a>
+              <a
+                href="#"
+                onClick={() => {
+                  directPage("/ProgressPage");
+                }}
+              >
+                Perkembangan
+              </a>
             </li>
           </ul>
         </li>
@@ -87,54 +112,53 @@ export default observer(function NavLane() {
             </li>
           </ul>
         </li>
-        <li>
-          <a href="#" className="nav-link">
-            <svg className="menu-icon">
-              <use xlinkHref={`${Icons}#icon-cog`}></use>
-            </svg>
-            <span className="menu-text">Kelola Akun</span>
-          </a>
-          <ul>
-            <li>
-              <a href="#">System</a>
-              <ul>
-                <li>
-                  <a
-                    href="#"
-                    onClick={() => {
-                      directPage("/PackageGrid");
-                    }}
-                  >
-                    Jenis Paket
-                  </a>
-                </li>
-                <li>
-                  <a href="#">Restore</a>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <a
-                href="#"
-                onClick={() => {
-                  directPage("/QuestionGrid");
-                }}
-              >
-                Daftar Soal
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                onClick={() => {
-                  directPage("/QuestionForm");
-                }}
-              >
-                Admin
-              </a>
-            </li>
-          </ul>
-        </li>
+        {userProfile?.userType === "root" && (
+          <li>
+            <a href="#" className="nav-link">
+              <svg className="menu-icon">
+                <use xlinkHref={`${Icons}#icon-cog`}></use>
+              </svg>
+              <span className="menu-text">Kelola System</span>
+            </a>
+            <ul>
+              <li>
+                <a href="#">System</a>
+                <ul>
+                  <li>
+                    <a
+                      href="#"
+                      onClick={() => {
+                        directPage("/PackageGrid");
+                      }}
+                    >
+                      Jenis Paket
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      onClick={() => {
+                        directPage("/MapDrone");
+                      }}
+                    >
+                      Restore
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  onClick={() => {
+                    directPage("/QuestionGrid");
+                  }}
+                >
+                  Daftar Soal
+                </a>
+              </li>
+            </ul>
+          </li>
+        )}
       </ul>
     </nav>
   );

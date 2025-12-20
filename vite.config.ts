@@ -3,7 +3,13 @@ import react from "@vitejs/plugin-react-swc";
 
 export default defineConfig(() => {
   return {
+    optimizeDeps: {
+      include: ["lodash", "axios"],
+      exclude: ["fsevents"],
+    },
     build: {
+      chunkSizeWarningLimit: 1000,
+      target: "esnext",
       outDir: "../wwwroot",
     },
     define: {
@@ -11,7 +17,9 @@ export default defineConfig(() => {
     },
     server: {
       port: 3001,
-      hmr: true,
+      hmr: {
+        overlay: false, // avoids heavy error screen & reduces memory spikes
+      },
     },
     plugins: [react()],
   };

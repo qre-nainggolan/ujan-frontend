@@ -1,10 +1,10 @@
 .row2 {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.85rem;
-  max-width: 114rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+  gap: 4rem;
+  width: 95%;
   margin: 0 auto;
-  padding: 1rem 1rem;
+  padding: 1rem;
 }
 
 .card-wrapper {

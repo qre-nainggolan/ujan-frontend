@@ -40,12 +40,12 @@ export default observer(function QuestionGrid() {
       <div className="layout__body">
         <NavLane />
         <main className="layout__main">
-          <h1>Packets</h1>
-          <div className="u-center-text u-margin-bottom-medium">
+          <center>
             <h2 className="heading-secondary">
-              Latihan dengan semakin baik...
+              Persiapan dengan semakin baik...
             </h2>
-          </div>
+          </center>
+          <div className="section-divider"></div>
           <div className="row2">
             {listAvailablePackage.map((pkg: any, index: any) => (
               <div className="card-wrapper" key={pkg.id}>
@@ -145,12 +145,10 @@ export default observer(function QuestionGrid() {
           }}
         >
           <h3 className="popup__confirmation__title">Submit Confirmation</h3>
-          <p className="popup__confirmation__text">
-            Yakin untuk mulai simulasi?
-          </p>
+          <p className="popup__confirmation__text">Yakin mulai simulasi?</p>
           <div className="popup__confirmation__buttons">
             <button
-              className="popup__confirmation__button popupConfirmation__button--yes"
+              className="popup__confirmation__button popup__confirmation__button--yes"
               onClick={() => {
                 startTest();
                 navigate(`/PackageTest?for=${choosedId}`);
@@ -159,7 +157,7 @@ export default observer(function QuestionGrid() {
               ✅ Yes, submit
             </button>
             <button
-              className="popup__confirmation__button popupConfirmation__button--cancel"
+              className="popup__confirmation__button popup__confirmation__button--cancel"
               onClick={() => setPopupConfirmationclass("popup__confirmation")}
             >
               ❌ Cancel
