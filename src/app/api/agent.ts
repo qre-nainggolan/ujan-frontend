@@ -70,7 +70,7 @@ const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 // axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 // axios.defaults.baseURL = "https://api.lulusku.com/api";
 axios.defaults.baseURL =
-  import.meta.env.VITE_API_URL || "https://api.lulusku.com/api";
+  import.meta.env.VITE_API_URL;
 
 axios.interceptors.response.use(
   (res) => res,
